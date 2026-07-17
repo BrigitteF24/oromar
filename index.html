@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oro Mar - Restaurante Campestre</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Poppins:wght@300;400;500;600&family=Dancing+Script:wght@700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html">
+      <img src="img/oromar.webp" alt="Logo Oro Mar" width="150" height="50">
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#inicio" class="nav-link active">Inicio</a></li>
+      <li><a href="#carta" class="nav-link">Carta</a></li>
+      <li><a href="#galeria" class="nav-link">Galería</a></li>
+      <li><a href="#reservas" class="nav-link">Reservas</a></li>
+      <li><a href="#nosotros" class="nav-link">Nosotros</a></li>
+      <li><a href="#contacto" class="nav-link">Contacto</a></li>
+      <li><a href="#registro" class="nav-link nav-register">Regístrate</a></li>
+      <li><button type="button" class="nav-link btn-ambiente" id="btnAmbiente">Modo campestre</button></li>
+    </ul>
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="hero-particles" id="particles"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">🌿 Restaurante Campestre</p>
+      <h1 class="hero-title">Sabores que <span class="hero-title-accent">nacen del mar</span></h1>
+      <p class="hero-sub">Ingredientes frescos, tradición viva y una vista al campo que nunca olvidarás.</p>
+      <div class="hero-cta-group">
+        <a href="#reservas" class="btn btn-primary">Reservar mesa</a>
+        <a href="#carta" class="btn btn-outline">Ver carta</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">12+</span><span class="stat-label">Años de experiencia</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">200+</span><span class="stat-label">Platos únicos</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">98%</span><span class="stat-label">Clientes satisfechos</span></div>
+      </div>
+    </div>
+
+    <div class="hero-image" aria-hidden="true">
+      <img src="img/hero-food.webp" alt="Plato principal Oro Mar" class="hero-food-img">
+    </div>
+    <div class="hero-scroll-indicator">
+      <span>Descubre más</span>
+      <i class="fas fa-chevron-down bounce"></i>
+    </div>
+  </section>
+
+  <!-- PROMOCIONES BANNER -->
+  <section class="promo-banner">
+  <h2 class="sr-only">Promoción destacada</h2>
+    <div class="promo-ticker">
+      <div class="promo-track">
+        <span>🔥 PROMO FINES DE SEMANA: 2x1 en ceviche mixto</span>
+        <span>⭐ Menú ejecutivo desde S/. 25.00</span>
+        <span>🎉 Celebra tu cumpleaños con nosotros y obtén postre gratis</span>
+        <span>🦞 Nuevos langostinos al ajillo — ¡ya disponibles!</span>
+        <span>🔥 PROMO FINES DE SEMANA: 2x1 en ceviche mixto</span>
+        <span>⭐ Menú ejecutivo desde S/. 25.00</span>
+        <span>🎉 Celebra tu cumpleaños con nosotros y obtén postre gratis</span>
+        <span>🦞 Nuevos langostinos al ajillo — ¡ya disponibles!</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- REGISTRO DE CLIENTE -->
+  <section class="registro-section" id="registro">
+    <div class="registro-container">
+      <div class="registro-copy">
+        <p class="section-eyebrow">Únete a Oro Mar</p>
+        <h2 class="section-title">Regístrate y disfruta una atención <span class="highlight">más rápida</span></h2>
+        <p class="section-sub">Crea tu registro con tus datos básicos para poder reservar, comentar y enviarnos mensajes
+          sin colocar ningún código interno. Tu ID lo maneja el sistema, tú solo disfruta la experiencia.</p>
+        <div class="registro-beneficios">
+          <span><i class="fas fa-check-circle"></i> Reserva más fácil</span>
+          <span><i class="fas fa-check-circle"></i> Comenta tu experiencia</span>
+          <span><i class="fas fa-check-circle"></i> Atención más ordenada</span>
+        </div>
+      </div>
+
+      <form class="reserva-form-card registro-form-card" id="formRegistroCliente" onsubmit="registrarCliente(event)">
+        <h3>Registro de cliente</h3>
+        <p class="form-note">Regístrate para poder interactuar con Oro Mar desde la página web.</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="regNombres">Nombres</label>
+            <input type="text" id="regNombres" name="nombres" placeholder="Ej: Juan" required minlength="2"
+              maxlength="80" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,80}">
+          </div>
+          <div class="form-group">
+            <label for="regApellidos">Apellidos</label>
+            <input type="text" id="regApellidos" name="apellidos" placeholder="Ej: Pérez Ruiz" required minlength="2"
+              maxlength="100" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,100}">
+          </div>
+          <div class="form-group">
+            <label for="regTelefono">Teléfono</label>
+            <input type="tel" id="regTelefono" name="telefono" placeholder="999888777" required pattern="[0-9]{9}"
+              maxlength="9">
+          </div>
+          <div class="form-group">
+            <label for="regCorreo">Correo electrónico</label>
+            <input type="email" id="regCorreo" name="correo" placeholder="cliente@correo.com" required maxlength="150">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">
+          <i class="fas fa-user-plus"></i> Registrarme
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- CARTA -->
+  <section class="carta-section" id="carta">
+    <div class="section-header">
+      <p class="section-eyebrow">Nuestros Platos</p>
+      <h2 class="section-title">La <span class="highlight">Carta</span></h2>
+      <p class="section-sub">Platos preparados al momento con el sabor tradicional de Oro Mar.</p>
+    </div>
+
+    <div class="carta-tabs">
+      <button class="tab-btn active" data-cat="pescados">Pescados y Mariscos</button>
+      <button class="tab-btn" data-cat="criollos">Criollos</button>
+    </div>
+
+    <div class="carta-grid" id="cartaGrid">
+
+      <!-- PESCADOS Y MARISCOS -->
+      <div class="carta-card" data-cat="pescados">
+        <div class="carta-img">
+          <img src="img/ceviche-mixto.webp" alt="Ceviche Mixto"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Ceviche Mixto</h3>
+          <p>Pescado y mariscos frescos marinados con limón, cebolla y ají.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="pescados">
+        <div class="carta-img">
+          <img src="img/ceviche-caballa.webp" alt="Ceviche de Caballa"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Ceviche de Caballa</h3>
+          <p>Caballa fresca preparada con limón, cebolla, ají y culantro.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="pescados">
+        <div class="carta-img">
+          <img src="img/sudado-parihuela.webp" alt="Sudado Parihuela"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Sudado / Parihuela</h3>
+          <p>Caldo criollo concentrado con pescado, mariscos y sazón de casa.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="pescados">
+        <div class="carta-img">
+          <img src="img/chicharron-pescado.webp" alt="Chicharrón de Pescado"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Chicharrón de Pescado</h3>
+          <p>Pescado crocante acompañado con yuca, ensalada y cremas.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="pescados">
+        <div class="carta-img">
+          <img src="img/arroz-mariscos.webp" alt="Arroz con Marsicos"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Arroz y Chaufa de Marisco</h3>
+          <p>Arroz o chaufa preparado con mariscos frescos y sazón especial.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="pescados">
+        <div class="carta-img">
+          <img src="img/pescado-frito.webp" alt="Pescado Frito"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Pescado Frito</h3>
+          <p>Pescado dorado servido con arroz, ensalada y guarnición.</p>
+        </div>
+      </div>
+
+      <!-- CRIOLLOS -->
+      <div class="carta-card" data-cat="criollos" style="display:none">
+        <div class="carta-img">
+          <img src="img/pato-guisado.webp" alt="Pato Guisado"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Pato Guisado</h3>
+          <p>Pato cocido lentamente con aderezo criollo y sabor casero.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="criollos" style="display:none">
+        <div class="carta-img">
+          <img src="img/arroz-pato.webp" alt="Arroz con Pato"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Arroz con Pato</h3>
+          <p>Arroz verde con culantro, cerveza negra y presa de pato.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="criollos" style="display:none">
+        <div class="carta-img">
+          <img src="img/pollo-plancha.webp" alt="Pollo a la Plancha"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Pollo a la Plancha</h3>
+          <p>Pechuga de pollo dorada a la plancha con arroz o ensalada.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="criollos" style="display:none">
+        <div class="carta-img">
+          <img src="img/chicharron-pollo.webp" alt="Chicharrón de Pollo"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Chicharrón de Pollo</h3>
+          <p>Trozos de pollo crocante acompañados con papas y cremas.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="criollos" style="display:none">
+        <div class="carta-img">
+          <img src="img/milanesa-pollo.webp" alt="Milanesa de Pollo"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Milanesa de Pollo</h3>
+          <p>Filete de pollo apanado, dorado y servido con arroz o papas.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="criollos" style="display:none">
+        <div class="carta-img">
+          <img src="img/lomo-saltado.webp" alt="Lomo Saltado"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Lomo Saltado</h3>
+          <p>Lomo salteado con cebolla, tomate, papas fritas y arroz.</p>
+        </div>
+      </div>
+
+      <div class="carta-card" data-cat="criollos" style="display:none">
+        <div class="carta-img">
+          <img src="img/chuleta-chancho.webp" alt="Chuleta de Chancho"
+            style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div class="carta-info">
+          <h3>Chuleta de Chancho</h3>
+          <p>Chuleta dorada y jugosa acompañada con arroz, papas o ensalada.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GALERÍA -->
+  <section class="galeria-section" id="galeria">
+    <div class="section-header">
+      <p class="section-eyebrow">Galería</p>
+      <h2 class="section-title">Momentos <span class="highlight">Inolvidables</span></h2>
+    </div>
+    <div class="galeria-grid">
+      <div class="gal-item gal-big" style="background:linear-gradient(135deg,#0f4c81,#1e90ff)">
+        <img src="img/vista-campo.webp" alt="Vista al campo"
+          style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="gal-overlay">
+          <p>Vista al campo</p>
+        </div>
+      </div>
+      <div class="gal-item" style="background:linear-gradient(135deg,#7c3f00,#d2691e)">
+        <img src="img/presentacion-platos.webp" alt="Presentación de platos"
+          style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="gal-overlay">
+          <p>Presentación de platos</p>
+        </div>
+      </div>
+      <div class="gal-item" style="background:linear-gradient(135deg,#1a6b1a,#32cd32)">
+        <img src="img/estacionamiento.webp" alt="Estacionamiento"
+          style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="gal-overlay">
+          <p>Estacionamiento</p>
+        </div>
+      </div>
+      <div class="gal-item" style="background:linear-gradient(135deg,#800020,#ff6b81)">
+        <img src="img/mariscos-frescos.webp" alt="Mariscos frescos"
+          style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="gal-overlay">
+          <p>Mariscos frescos</p>
+        </div>
+      </div>
+      <div class="gal-item" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">
+        <img src="img/parrilla.webp" alt="Parrilla en vivo"
+          style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="gal-overlay">
+          <p>Parrilla en vivo</p>
+        </div>
+      </div>
+      <div class="gal-item" style="background:linear-gradient(135deg,#6d28d9,#a78bfa)">
+        <img src="img/eventos.webp" alt="Eventos especiales"
+          style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="gal-overlay">
+          <p>Eventos especiales</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVAS -->
+  <section class="reservas-section" id="reservas">
+    <div class="reservas-bg"></div>
+    <div class="reservas-container">
+      <div class="section-header">
+        <p class="section-eyebrow" style="color:#fbbf24">Reservaciones</p>
+        <h2 class="section-title" style="color:#fff">Asegura tu <span style="color:#fbbf24">mesa</span></h2>
+        <p class="section-sub" style="color:rgba(255,255,255,0.7)">Reserva con anticipación y vive la experiencia
+          completa.</p>
+      </div>
+      <form class="reserva-form-card" id="formReserva" onsubmit="enviarReserva(event)">
+        <h3>Reserva de mesa</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="resNombre">Nombre completo</label>
+            <input type="text" id="resNombre" name="nombre" placeholder="Ej: Juan Pérez" required minlength="3"
+              maxlength="100" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,100}">
+          </div>
+          <div class="form-group">
+            <label for="resTelefono">Teléfono</label>
+            <input type="tel" id="resTelefono" name="telefono" placeholder="999888777" required pattern="[0-9]{9}"
+              maxlength="9">
+          </div>
+          <div class="form-group">
+            <label for="resCorreo">Correo electrónico</label>
+            <input type="email" id="resCorreo" name="correo" placeholder="cliente@correo.com" required maxlength="150">
+          </div>
+          <div class="form-group">
+            <label for="resFecha">Fecha</label>
+            <input type="date" id="resFecha" name="fecha" required>
+          </div>
+          <div class="form-group">
+            <label for="resHora">Hora</label>
+            <input type="time" id="resHora" name="hora" min="10:00" max="20:00" required>
+          </div>
+          <div class="form-group">
+            <label for="resPersonas">N° de personas</label>
+            <input type="number" id="resPersonas" name="cantidad_personas" min="1" max="20" step="1" value="4" required>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label for="resComentario">Comentarios adicionales</label>
+          <textarea id="resComentario" name="observacion" rows="3" maxlength="300"
+            placeholder="Celebración especial, alergias, preferencias..."></textarea>
+          <small id="contadorResComentario" class="contador-caracteres">0 / 300 caracteres</small>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">
+          <i class="fab fa-whatsapp"></i> Confirmar Reserva por WhatsApp
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section class="nosotros-section" id="nosotros">
+    <div class="nosotros-content">
+      <div class="nosotros-text">
+        <p class="section-eyebrow">Nuestra Historia</p>
+        <h2 class="section-title">El corazón de <span class="highlight">Oro Mar</span></h2>
+        <p>Nacimos en el corazón de la campiña peruana, donde el aroma del campo se mezcla con la brisa marina. Desde
+          2012, nuestra cocina fusiona los mejores mariscos frescos con la calidez de una gastronomía campestre
+          auténtica.</p>
+        <p>Cada plato es una historia: ingredientes traídos directamente de pescadores y agricultores locales,
+          preparados con técnicas que han pasado de generación en generación.</p>
+        <div class="valores-grid">
+          <div class="valor">
+            <span class="valor-icon">🌿</span>
+            <div>
+              <strong>Ingredientes Frescos</strong>
+              <p>Abastecimiento local cada mañana</p>
+            </div>
+          </div>
+          <div class="valor">
+            <span class="valor-icon">👨‍🍳</span>
+            <div>
+              <strong>Chef Especializado</strong>
+              <p>15 años de trayectoria gastronómica</p>
+            </div>
+          </div>
+          <div class="valor">
+            <span class="valor-icon">🏕️</span>
+            <div>
+              <strong>Ambiente Único</strong>
+              <p>3,000 m² de jardines naturales</p>
+            </div>
+          </div>
+          <div class="valor">
+            <span class="valor-icon">🏆</span>
+            <div>
+              <strong>Premiados</strong>
+              <p>Mejor restaurante campestre 2023</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nosotros-visual">
+        <div class="nosotros-card-big" style="background:linear-gradient(160deg,#0f4c81,#1e6e9e,#34a56f)">
+          <span style="font-size:80px">🌿🦞</span>
+          <p>12 años cocinando con alma</p>
+        </div>
+        <div class="nosotros-card-sm" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+          <span>👨‍🍳</span>
+          <p>Chef José Clemente Barboza Vázquez</p>
+        </div>
+        <div class="nosotros-card-sm" style="background:linear-gradient(135deg,#10b981,#059669)">
+          <span>🌱</span>
+          <p>Cocina sostenible</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMENTARIOS -->
+  <section class="comentarios-section" id="comentarios">
+    <div class="section-header">
+      <p class="section-eyebrow">Opiniones</p>
+      <h2 class="section-title">¿Qué dicen nuestros <span class="highlight">clientes</span>?</h2>
+    </div>
+    <div class="comentarios-grid">
+      <div class="comentario-card">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"El ceviche mixto es simplemente espectacular. Ambiente increíble y el servicio de primera. Sin duda el mejor
+          restaurante de la región."</p>
+        <div class="comentario-autor">
+          <div class="autor-avatar">M</div>
+          <div><strong>María Quispe</strong><small>Cliente frecuente</small></div>
+        </div>
+      </div>
+      <div class="comentario-card featured">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"Celebramos nuestro aniversario aquí y fue perfecto. La parrilla campestre es un imperdible. El jardín es
+          hermoso para fotos."</p>
+        <div class="comentario-autor">
+          <div class="autor-avatar" style="background:#f59e0b">C</div>
+          <div><strong>Carlos Mendoza</strong><small>Trip Advisor</small></div>
+        </div>
+      </div>
+      <div class="comentario-card">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"Los langostinos al ajillo son de otro nivel. La atención es muy cálida y el ambiente campestre te hace
+          sentir lejos de la ciudad."</p>
+        <div class="comentario-autor">
+          <div class="autor-avatar" style="background:#10b981">L</div>
+          <div><strong>Lucía Torres</strong><small>Google Maps</small></div>
+        </div>
+      </div>
+    </div>
+    <!-- Formulario de comentario -->
+    <form class="comentario-form-wrap" id="formComentario" onsubmit="guardarComentario(event)">
+      <h3>Deja tu reseña</h3>
+      <div class="star-rating" id="starRating" role="radiogroup" aria-label="Calificación del cliente">        <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span>
+        <span data-val="4">★</span><span data-val="5">★</span>
+      </div>
+      <div class="form-grid">
+        <input type="text" id="comNombre" name="nombre" placeholder="Tu nombre" required minlength="3" maxlength="100"
+          pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,100}">
+        <input type="tel" id="comTel" name="telefono" placeholder="Teléfono" required pattern="[0-9]{9}" maxlength="9">
+        <input type="email" id="comCorreo" name="correo" placeholder="Correo electrónico" required maxlength="150">
+      </div>
+      <textarea id="comTexto" name="comentario" rows="3" placeholder="Cuéntanos tu experiencia..." required
+        minlength="5" maxlength="500"></textarea>
+      <small id="contadorComTexto" class="contador-caracteres">0 / 500 caracteres</small>
+      <button type="submit" class="btn btn-primary">Enviar reseña</button>
+    </form>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="contacto-section" id="contacto">
+    <div class="section-header">
+      <p class="section-eyebrow">Encuéntranos</p>
+      <h2 class="section-title">¿Cómo <span class="highlight">llegar?</span></h2>
+    </div>
+    <div class="contacto-grid">
+      <div class="contacto-info">
+        <div class="info-item"><i class="fas fa-map-marker-alt"></i>
+          <div><strong>Dirección</strong>
+            <p>Ctra. Panamericana N 170<br>Referencia: entrada a Pacanguilla,<br>La Libertad, Perú</p>
+          </div>
+        </div>
+        <div class="info-item"><i class="fas fa-phone"></i>
+          <div><strong>Teléfono</strong>
+            <p>+51 944 123 456</p>
+          </div>
+        </div>
+        <div class="info-item"><i class="fas fa-envelope"></i>
+          <div><strong>Correo</strong>
+            <p>reservas@oromar.pe</p>
+          </div>
+        </div>
+        <div class="info-item"><i class="fas fa-clock"></i>
+          <div><strong>Horario</strong>
+            <p>Lun–Vie: 10:00 – 18:00<br>Sáb–Dom: 10:00 – 20:00</p>
+          </div>
+        </div>
+        <div class="social-links">
+          <a href="https://web.facebook.com" alt="facebook" class="social-btn facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com" alt="instagram" class="social-btn instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.whatsapp.com" alt="whatsapp" class="social-btn whatsapp-btn" onclick="openWhatsApp()"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://www.tiktok.com" alt="tiktok" class="social-btn tiktok"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+      <form class="contacto-form-area" id="formContacto" onsubmit="enviarContacto(event)">
+        <h3>Envíanos un mensaje</h3>
+        <div class="form-grid">
+          <input type="text" id="ctaNombre" name="nombre" placeholder="Tu nombre" required minlength="3" maxlength="100"
+            pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,100}">
+          <input type="tel" id="ctaTel" name="telefono" placeholder="Teléfono" required pattern="[0-9]{9}"
+            maxlength="9">
+        </div>
+        <input type="email" id="ctaCorreo" name="correo" placeholder="Correo electrónico" required maxlength="150"
+          style="width:100%;margin-bottom:12px">
+        <textarea id="ctaMensaje" name="mensaje" rows="4" placeholder="¿En qué podemos ayudarte?" required minlength="5"
+          maxlength="500"></textarea>
+        <small id="contadorCtaMensaje" class="contador-caracteres">0 / 500 caracteres</small>
+        <button type="submit" class="btn btn-primary btn-full">Enviar mensaje</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="index.html">
+          <img src="img/oromar.webp" alt="Logo" width="150">
+        </a>
+        <p>Restaurante campestre donde el mar y el campo se encuentran.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Navegación</h4>
+        <a href="#inicio">Inicio</a>
+        <a href="#carta">Carta</a>
+        <a href="#galeria">Galería</a>
+        <a href="#reservas">Reservas</a>
+        <a href="#nosotros">Nosotros</a>
+      </div>
+      <div class="footer-links">
+        <h4>Servicios</h4>
+        <a href="galeria">Eventos privados</a>
+        <a href="carta">Catering</a>
+        <a href="#carta">Menú ejecutivo</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 OroMar — Todos los derechos reservados</p>
+      <a href="admin.html" class="footer-admin-link"><i class="fas fa-cog"></i> Sistema interno</a>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FLOAT -->
+  <a class="whatsapp-float" href="https://wa.me/51944123456" target="_blank" id="waFloat">
+    <i class="fab fa-whatsapp"></i>
+    <span class="wa-tooltip">¡Escríbenos!</span>
+  </a>
+
+  <!-- ASISTENTE VIRTUAL -->
+  <div class="chat-widget" id="chatWidget">
+    <div class="chat-header" onclick="toggleChat()">
+      <div class="chat-avatar">🤖</div>
+      <div><strong>Oro Bot</strong><small>Asistente virtual</small></div>
+      <button class="chat-close" id="chatToggleBtn">▼</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-messages" id="chatMessages">
+        <div class="bot-msg">¡Hola! Soy el asistente de <strong>OroMar</strong>. ¿En qué puedo ayudarte? 🦞</div>
+      </div>
+      <div class="quick-btns">
+        <button onclick="quickAsk('¿Cuál es el horario?')">⏰ Horario</button>
+        <button onclick="quickAsk('¿Cómo reservo una mesa?')">📅 Reservar</button>
+        <button onclick="quickAsk('¿Dónde están ubicados?')">📍 Ubicación</button>
+        <button onclick="quickAsk('¿Cuál es el plato más pedido?')">🍽️ Platos</button>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Escribe tu pregunta..."
+          onkeydown="if(event.key==='Enter')sendChat()">
+        <button onclick="sendChat()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="main.js"></script>
+</body>
+
+</html>

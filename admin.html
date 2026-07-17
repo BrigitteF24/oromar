@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OroMar – Sistema Interno</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --gold: #D4A017;
+      --green: #2D6A4F;
+      --blue: #0077B6;
+      --coral: #F4845F;
+      --dark: #1A1A2E;
+      --sidebar: #16213E;
+      --card: #fff;
+      --bg: #f4f6fb;
+      --text: #333;
+      --border: #e5e7eb;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* LOGIN */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1A1A2E, #16213E, #0d3b2e);
+    }
+
+    .login-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 48px;
+      width: 360px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+      text-align: center;
+    }
+
+    .login-logo {
+      font-size: 48px;
+      margin-bottom: 8px;
+    }
+
+    .login-card h2 {
+      font-size: 24px;
+      margin-bottom: 4px;
+      color: var(--dark);
+    }
+
+    .login-card p {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 28px;
+    }
+
+    .login-card input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      margin-bottom: 14px;
+      outline: none;
+      transition: .2s;
+    }
+
+    .login-card input:focus {
+      border-color: var(--gold);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--gold), #e8a800);
+      border: none;
+      border-radius: 10px;
+      color: var(--dark);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 160, 23, .4);
+    }
+
+    .login-hint {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 14px;
+    }
+
+    /* ADMIN LAYOUT */
+    .admin-wrap {
+      display: flex;
+      min-height: 100vh;
+      display: none;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: var(--sidebar);
+      color: #fff;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-logo span {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 20px 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, .6);
+      font-size: 14px;
+      transition: .2s;
+      margin-bottom: 4px;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: rgba(212, 160, 23, .15);
+      color: var(--gold);
+    }
+
+    .nav-item i {
+      width: 18px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+      font-size: 12px;
+      color: rgba(255, 255, 255, .3);
+    }
+
+    .admin-main {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .topbar {
+      background: #fff;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, .06);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topbar h2 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .badge-noti {
+      background: var(--coral);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 50px;
+    }
+
+    .topbar-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dark);
+      font-weight: 700;
+    }
+
+    .content {
+      padding: 28px;
+    }
+
+    /* MODULES */
+    .module {
+      display: none;
+    }
+
+    .module.active {
+      display: block;
+    }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+      border-left: 4px solid transparent;
+    }
+
+    .stat-card.gold {
+      border-color: var(--gold);
+    }
+
+    .stat-card.green {
+      border-color: var(--green);
+    }
+
+    .stat-card.blue {
+      border-color: var(--blue);
+    }
+
+    .stat-card.coral {
+      border-color: var(--coral);
+    }
+
+    .stat-card label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .val {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .stat-card .trend {
+      font-size: 12px;
+      color: #25d366;
+      margin-top: 6px;
+    }
+
+    /* TABLE */
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .card-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .btn-sm {
+      padding: 7px 16px;
+      border-radius: 8px;
+      border: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .btn-success {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--dark);
+    }
+
+    .btn-danger {
+      background: var(--coral);
+      color: #fff;
+    }
+
+    .btn-sm:hover {
+      opacity: .85;
+      transform: translateY(-1px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead tr {
+      background: var(--bg);
+    }
+
+    th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #888;
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-green {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .badge-yellow {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-red {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-blue {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    /* FORMS */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: .2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--gold);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <div class="login-wrap" id="loginWrap">
+    <div class="login-card">
+      <img src="img/oromar.png" alt="Logo Oro Mar" width="150">
+      <h1>Sistema de gestión interna</h1>
+      <input type="text" id="loginUser" placeholder="Usuario" value="admin">
+      <input type="password" id="loginPass" placeholder="Contraseña" value="admin123">
+      <button class="btn-login" onclick="login()">Ingresar al sistema</button>
+      <p class="login-hint">Demo: admin / admin123</p>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div class="admin-wrap" id="adminWrap">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <img src="img/oromar.png" alt="Logo Oro Mar" width="150" height="80">
+      <nav class="sidebar-nav">
+        <div class="nav-item active" onclick="showModule('dashboard',this)"><i class="fas fa-th-large"></i> Dashboard
+        </div>
+        <div class="nav-item" onclick="showModule('reservas',this)"><i class="fas fa-calendar-check"></i> Reservas</div>
+        <div class="nav-item" onclick="showModule('pedidos',this)"><i class="fas fa-utensils"></i> Pedidos</div>
+        <div class="nav-item" onclick="showModule('pagos',this)"><i class="fas fa-credit-card"></i> Pagos</div>
+        <div class="nav-item" onclick="showModule('inventario',this)"><i class="fas fa-boxes"></i> Inventario</div>
+        <div class="nav-item" onclick="showModule('productos',this)"><i class="fas fa-hamburger"></i> Productos</div>
+        <div class="nav-item" onclick="showModule('mesas',this)"><i class="fas fa-chair"></i> Mesas</div>
+        <div class="nav-item" onclick="showModule('clientes',this)"><i class="fas fa-users"></i> Clientes</div>
+        <div class="nav-item" onclick="showModule('comentarios',this)"><i class="fas fa-star"></i> Reseñas</div>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="index.html" style="color:inherit;text-decoration:none">← Ver sitio web</a><br>
+        <span onclick="logout()" style="cursor:pointer;margin-top:8px;display:block">🚪 Cerrar sesión</span>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="admin-main">
+      <div class="topbar">
+        <h2 id="topbarTitle">Dashboard</h2>
+        <div class="topbar-right">
+          <span>🔔 <span class="badge-noti">3</span></span>
+          <div class="topbar-user">
+            <div class="user-avatar">A</div>
+            <span>Administrador</span>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+
+        <!-- DASHBOARD -->
+        <div class="module active" id="mod-dashboard">
+          <div class="stats-grid">
+            <div class="stat-card gold"><label>Reservas hoy</label>
+              <div class="val">8</div>
+              <div class="trend">↑ +2 vs ayer</div>
+            </div>
+            <div class="stat-card green"><label>Pedidos activos</label>
+              <div class="val">12</div>
+              <div class="trend">↑ 3 en cocina</div>
+            </div>
+            <div class="stat-card blue"><label>Ingresos del día</label>
+              <div class="val">S/.1,240</div>
+              <div class="trend">↑ +18% vs ayer</div>
+            </div>
+            <div class="stat-card coral"><label>Mesas ocupadas</label>
+              <div class="val">6/10</div>
+              <div class="trend">60% ocupación</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3>📋 Últimos pedidos</h3><button class="btn-sm btn-success" onclick="showModule('pedidos',null)">Ver
+                todos</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Mesa</th>
+                  <th>Platos</th>
+                  <th>Estado</th>
+                  <th>Total</th>
+                  <th>Hora</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#001</td>
+                  <td>Mesa 3</td>
+                  <td>Ceviche Mixto, Chicha</td>
+                  <td><span class="badge badge-green">Entregado</span></td>
+                  <td>S/. 46</td>
+                  <td>12:35</td>
+                </tr>
+                <tr>
+                  <td>#002</td>
+                  <td>Mesa 7</td>
+                  <td>Parrilla Campestre, Pisco</td>
+                  <td><span class="badge badge-yellow">En cocina</span></td>
+                  <td>S/. 83</td>
+                  <td>13:10</td>
+                </tr>
+                <tr>
+                  <td>#003</td>
+                  <td>Mesa 1</td>
+                  <td>Langostinos x2, Chicha x2</td>
+                  <td><span class="badge badge-blue">Nuevo</span></td>
+                  <td>S/. 120</td>
+                  <td>13:22</td>
+                </tr>
+                <tr>
+                  <td>#004</td>
+                  <td>Mesa 5</td>
+                  <td>Lomo Saltado, Tiradito</td>
+                  <td><span class="badge badge-yellow">En cocina</span></td>
+                  <td>S/. 70</td>
+                  <td>13:35</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3>📅 Reservas próximas</h3>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Fecha</th>
+                  <th>Hora</th>
+                  <th>Personas</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>María Quispe</td>
+                  <td>Hoy</td>
+                  <td>14:00</td>
+                  <td>4</td>
+                  <td><span class="badge badge-green">Confirmada</span></td>
+                </tr>
+                <tr>
+                  <td>Carlos Mendoza</td>
+                  <td>Hoy</td>
+                  <td>19:30</td>
+                  <td>6</td>
+                  <td><span class="badge badge-green">Confirmada</span></td>
+                </tr>
+                <tr>
+                  <td>Lucía Torres</td>
+                  <td>Mañana</td>
+                  <td>13:00</td>
+                  <td>2</td>
+                  <td><span class="badge badge-yellow">Pendiente</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RESERVAS -->
+        <div class="module" id="mod-reservas">
+          <div class="card">
+            <div class="card-header">
+              <h3>📅 Gestión de Reservas</h3><button class="btn-sm btn-primary" onclick="addReserva()">+ Nueva
+                reserva</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Teléfono</th>
+                  <th>Fecha</th>
+                  <th>Hora</th>
+                  <th>Personas</th>
+                  <th>Mesa</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="reservasBody">
+                <tr>
+                  <td>#R001</td>
+                  <td>María Quispe</td>
+                  <td>944 111 222</td>
+                  <td>Hoy</td>
+                  <td>14:00</td>
+                  <td>4</td>
+                  <td>Mesa 3</td>
+                  <td><span class="badge badge-green">Confirmada</span></td>
+                  <td><button class="btn-sm btn-danger" onclick="deleteRow(this)">Cancelar</button></td>
+                </tr>
+                <tr>
+                  <td>#R002</td>
+                  <td>Carlos Mendoza</td>
+                  <td>955 333 444</td>
+                  <td>Hoy</td>
+                  <td>19:30</td>
+                  <td>6</td>
+                  <td>Mesa 7</td>
+                  <td><span class="badge badge-green">Confirmada</span></td>
+                  <td><button class="btn-sm btn-danger" onclick="deleteRow(this)">Cancelar</button></td>
+                </tr>
+                <tr>
+                  <td>#R003</td>
+                  <td>Lucía Torres</td>
+                  <td>966 555 666</td>
+                  <td>Mañana</td>
+                  <td>13:00</td>
+                  <td>2</td>
+                  <td>Mesa 2</td>
+                  <td><span class="badge badge-yellow">Pendiente</span></td>
+                  <td><button class="btn-sm btn-success" onclick="confirmRow(this)">Confirmar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PEDIDOS -->
+        <div class="module" id="mod-pedidos">
+          <div class="card">
+            <div class="card-header">
+              <h3>🍽️ Pedidos en curso</h3>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Mesa</th>
+                  <th>Mesero</th>
+                  <th>Platos</th>
+                  <th>Estado</th>
+                  <th>Total</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#001</td>
+                  <td>Mesa 3</td>
+                  <td>Juan R.</td>
+                  <td>Ceviche Mixto, Chicha</td>
+                  <td><span class="badge badge-green">Entregado</span></td>
+                  <td>S/.46</td>
+                  <td><button class="btn-sm btn-primary" onclick="cobrarPedido(this,'46')">Cobrar</button></td>
+                </tr>
+                <tr>
+                  <td>#002</td>
+                  <td>Mesa 7</td>
+                  <td>Ana M.</td>
+                  <td>Parrilla, Pisco Sour</td>
+                  <td><span class="badge badge-yellow">En cocina</span></td>
+                  <td>S/.83</td>
+                  <td><button class="btn-sm btn-success" onclick="marcarListo(this)">Listo</button></td>
+                </tr>
+                <tr>
+                  <td>#003</td>
+                  <td>Mesa 1</td>
+                  <td>Juan R.</td>
+                  <td>Langostinos x2, Chicha x2</td>
+                  <td><span class="badge badge-blue">Nuevo</span></td>
+                  <td>S/.120</td>
+                  <td><button class="btn-sm btn-success" onclick="marcarListo(this)">Preparar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PAGOS -->
+        <div class="module" id="mod-pagos">
+          <div class="card">
+            <div class="card-header">
+              <h3>💳 Registro de Pagos</h3>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card gold"><label>Efectivo hoy</label>
+                <div class="val">S/.680</div>
+              </div>
+              <div class="stat-card blue"><label>Tarjeta hoy</label>
+                <div class="val">S/.420</div>
+              </div>
+              <div class="stat-card green"><label>Yape/Plin</label>
+                <div class="val">S/.140</div>
+              </div>
+              <div class="stat-card coral"><label>Total día</label>
+                <div class="val">S/.1,240</div>
+              </div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Pedido</th>
+                  <th>Monto</th>
+                  <th>Método</th>
+                  <th>Comprobante</th>
+                  <th>Fecha/Hora</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#P001</td>
+                  <td>#001</td>
+                  <td>S/.46</td>
+                  <td>Efectivo</td>
+                  <td>B001-00001</td>
+                  <td>12:45 hoy</td>
+                </tr>
+                <tr>
+                  <td>#P002</td>
+                  <td>#002</td>
+                  <td>S/.83</td>
+                  <td>Tarjeta</td>
+                  <td>B001-00002</td>
+                  <td>13:20 hoy</td>
+                </tr>
+                <tr>
+                  <td>#P003</td>
+                  <td>#004</td>
+                  <td>S/.70</td>
+                  <td>Yape</td>
+                  <td>B001-00003</td>
+                  <td>13:50 hoy</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- INVENTARIO -->
+        <div class="module" id="mod-inventario">
+          <div class="card">
+            <div class="card-header">
+              <h3>📦 Control de Inventario</h3><button class="btn-sm btn-primary" onclick="addInsumo()">+
+                Ingreso</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Insumo</th>
+                  <th>Unidad</th>
+                  <th>Stock actual</th>
+                  <th>Stock mínimo</th>
+                  <th>Estado</th>
+                  <th>Último movimiento</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Corvina fresca</td>
+                  <td>kg</td>
+                  <td>12.5</td>
+                  <td>5</td>
+                  <td><span class="badge badge-green">OK</span></td>
+                  <td>Hoy 08:00</td>
+                </tr>
+                <tr>
+                  <td>Langostinos</td>
+                  <td>kg</td>
+                  <td>4.0</td>
+                  <td>3</td>
+                  <td><span class="badge badge-yellow">Bajo</span></td>
+                  <td>Hoy 08:00</td>
+                </tr>
+                <tr>
+                  <td>Limón amarillo</td>
+                  <td>kg</td>
+                  <td>18.0</td>
+                  <td>10</td>
+                  <td><span class="badge badge-green">OK</span></td>
+                  <td>Ayer</td>
+                </tr>
+                <tr>
+                  <td>Ají amarillo</td>
+                  <td>kg</td>
+                  <td>2.0</td>
+                  <td>2</td>
+                  <td><span class="badge badge-red">⚠ Urgente</span></td>
+                  <td>Ayer</td>
+                </tr>
+                <tr>
+                  <td>Arroz blanco</td>
+                  <td>kg</td>
+                  <td>35.0</td>
+                  <td>15</td>
+                  <td><span class="badge badge-green">OK</span></td>
+                  <td>Lunes</td>
+                </tr>
+                <tr>
+                  <td>Papa amarilla</td>
+                  <td>kg</td>
+                  <td>22.0</td>
+                  <td>10</td>
+                  <td><span class="badge badge-green">OK</span></td>
+                  <td>Lunes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PRODUCTOS -->
+        <div class="module" id="mod-productos">
+          <div class="card">
+            <div class="card-header">
+              <h3>🍽️ Gestión de Carta</h3><button class="btn-sm btn-primary" onclick="addProducto()">+
+                Producto</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Categoría</th>
+                  <th>Precio</th>
+                  <th>Descripción</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#1</td>
+                  <td>Ceviche Mixto</td>
+                  <td>Mariscos</td>
+                  <td>S/.38</td>
+                  <td>Corvina, pulpo, camarones...</td>
+                  <td><button class="btn-sm btn-primary">Editar</button> <button class="btn-sm btn-danger"
+                      onclick="deleteRow(this)">Eliminar</button></td>
+                </tr>
+                <tr>
+                  <td>#2</td>
+                  <td>Langostinos al Ajillo</td>
+                  <td>Mariscos</td>
+                  <td>S/.52</td>
+                  <td>Langostinos, mantequilla...</td>
+                  <td><button class="btn-sm btn-primary">Editar</button> <button class="btn-sm btn-danger"
+                      onclick="deleteRow(this)">Eliminar</button></td>
+                </tr>
+                <tr>
+                  <td>#3</td>
+                  <td>Lomo Saltado</td>
+                  <td>Carnes</td>
+                  <td>S/.42</td>
+                  <td>Lomo fino, tomate...</td>
+                  <td><button class="btn-sm btn-primary">Editar</button> <button class="btn-sm btn-danger"
+                      onclick="deleteRow(this)">Eliminar</button></td>
+                </tr>
+                <tr>
+                  <td>#4</td>
+                  <td>Parrilla Campestre</td>
+                  <td>Carnes</td>
+                  <td>S/.65</td>
+                  <td>Costillas, chorizo...</td>
+                  <td><button class="btn-sm btn-primary">Editar</button> <button class="btn-sm btn-danger"
+                      onclick="deleteRow(this)">Eliminar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- MESAS -->
+        <div class="module" id="mod-mesas">
+          <div class="card">
+            <div class="card-header">
+              <h3>🪑 Estado de Mesas</h3>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:20px;" id="mesasGrid">
+            </div>
+            <div style="display:flex;gap:16px;font-size:13px;">
+              <span>🟢 Disponible</span><span>🔴 Ocupada</span><span>🟡 Reservada</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLIENTES -->
+        <div class="module" id="mod-clientes">
+          <div class="card">
+            <div class="card-header">
+              <h3>👥 Clientes registrados</h3>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Teléfono</th>
+                  <th>Visitas</th>
+                  <th>Gasto total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#C001</td>
+                  <td>María Quispe</td>
+                  <td>944 111 222</td>
+                  <td>12</td>
+                  <td>S/.580</td>
+                </tr>
+                <tr>
+                  <td>#C002</td>
+                  <td>Carlos Mendoza</td>
+                  <td>955 333 444</td>
+                  <td>5</td>
+                  <td>S/.290</td>
+                </tr>
+                <tr>
+                  <td>#C003</td>
+                  <td>Lucía Torres</td>
+                  <td>966 555 666</td>
+                  <td>3</td>
+                  <td>S/.145</td>
+                </tr>
+                <tr>
+                  <td>#C004</td>
+                  <td>Roberto Silva</td>
+                  <td>977 777 888</td>
+                  <td>8</td>
+                  <td>S/.410</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- COMENTARIOS -->
+        <div class="module" id="mod-comentarios">
+          <div class="card">
+            <div class="card-header">
+              <h3>⭐ Reseñas de clientes</h3>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Calificación</th>
+                  <th>Comentario</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ana López</td>
+                  <td>⭐⭐⭐⭐⭐</td>
+                  <td>Excelente servicio y comida increíble</td>
+                  <td>Hoy</td>
+                  <td><span class="badge badge-yellow">Pendiente</span></td>
+                  <td><button class="btn-sm btn-success" onclick="aprobarReseña(this)">Aprobar</button></td>
+                </tr>
+                <tr>
+                  <td>Pedro García</td>
+                  <td>⭐⭐⭐⭐</td>
+                  <td>Muy buena comida, esperé un poco</td>
+                  <td>Ayer</td>
+                  <td><span class="badge badge-green">Publicado</span></td>
+                  <td><button class="btn-sm btn-danger" onclick="deleteRow(this)">Ocultar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /content -->
+    </div><!-- /admin-main -->
+  </div><!-- /admin-wrap -->
+
+  <script>
+    // LOGIN
+    function login() {
+      const u = document.getElementById('loginUser').value;
+      const p = document.getElementById('loginPass').value;
+      if (u === 'admin' && p === 'admin123') {
+        document.getElementById('loginWrap').style.display = 'none';
+        document.getElementById('adminWrap').style.display = 'flex';
+      } else {
+        alert('Credenciales incorrectas. Usa admin / admin123');
+      }
+    }
+    function logout() {
+      document.getElementById('loginWrap').style.display = 'flex';
+      document.getElementById('adminWrap').style.display = 'none';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+
+    // MODULE NAV
+    function showModule(id, el) {
+      document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+      document.getElementById('mod-' + id).classList.add('active');
+      if (el) {
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('topbarTitle').textContent = el.textContent.trim();
+      }
+      if (id === 'mesas') renderMesas();
+    }
+
+    // MESAS VISUAL
+    const mesasState = ['disponible', 'disponible', 'ocupada', 'reservada', 'disponible', 'ocupada', 'ocupada', 'disponible', 'reservada', 'disponible'];
+    function renderMesas() {
+      const g = document.getElementById('mesasGrid');
+      g.innerHTML = mesasState.map((s, i) => {
+        const color = s === 'disponible' ? '#d1fae5' : s === 'ocupada' ? '#fee2e2' : '#fef3c7';
+        const border = s === 'disponible' ? '#10b981' : s === 'ocupada' ? '#ef4444' : '#f59e0b';
+        const emoji = s === 'disponible' ? '🟢' : s === 'ocupada' ? '🔴' : '🟡';
+        return `<div onclick="toggleMesa(${i})" style="background:${color};border:2px solid ${border};border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:.2s;">
+      <div style="font-size:24px">🪑</div>
+      <div style="font-weight:700;margin:4px 0">Mesa ${i + 1}</div>
+      <div style="font-size:11px;color:#666">${emoji} ${s.charAt(0).toUpperCase() + s.slice(1)}</div>
+    </div>`;
+      }).join('');
+    }
+    function toggleMesa(i) {
+      const states = ['disponible', 'ocupada', 'reservada'];
+      const idx = states.indexOf(mesasState[i]);
+      mesasState[i] = states[(idx + 1) % 3];
+      renderMesas();
+    }
+
+    // UTILS
+    function deleteRow(btn) { btn.closest('tr').remove(); }
+    function confirmRow(btn) { btn.closest('tr').querySelector('.badge').textContent = 'Confirmada'; btn.closest('tr').querySelector('.badge').className = 'badge badge-green'; btn.remove(); }
+    function marcarListo(btn) { const row = btn.closest('tr'); row.querySelector('.badge').textContent = 'Entregado'; row.querySelector('.badge').className = 'badge badge-green'; btn.textContent = 'Cobrar'; btn.onclick = () => cobrarPedido(btn, ''); }
+    function cobrarPedido(btn, monto) { alert('Registrar pago por S/. ' + monto + '\n\nEn producción esto abriría el módulo de pago.'); }
+    function aprobarReseña(btn) { const row = btn.closest('tr'); row.querySelector('.badge').textContent = 'Publicado'; row.querySelector('.badge').className = 'badge badge-green'; btn.remove(); }
+    function addReserva() { alert('Formulario de nueva reserva.\nEn producción mostraría un modal con el formulario completo.'); }
+    function addProducto() { alert('Formulario de nuevo producto.\nEn producción mostraría un modal con campos de nombre, categoría, precio, descripción.'); }
+    function addInsumo() { alert('Registro de entrada de insumo.\nEn producción mostraría el formulario de inventario.'); }
+  </script>
+</body>
+
+</html>
