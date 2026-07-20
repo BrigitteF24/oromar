@@ -2,83 +2,6 @@
 //   OroMar – main.js | Web pública informativa
 // ============================================================
 
-// ---------- CONEXIÓN CON SUPABASE ----------
-async function obtenerSupabase() {
-  if (!window.oromarDb) {
-    throw new Error(
-      'No se encontró la conexión con Supabase. Revisa que supabase.js se cargue antes que main.js'
-    );
-  }
-
-  return window.oromarDb;
-}
-
-function separarNombreCompleto(nombreCompleto) {
-  const partes = String(nombreCompleto || '')
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-
-  if (partes.length === 0) {
-    return { nombres: 'No indicado', apellidos: 'No indicado' };
-  }
-
-  if (partes.length === 1) {
-    return { nombres: partes[0], apellidos: 'No indicado' };
-  }
-
-  if (partes.length === 2) {
-    return { nombres: partes[0], apellidos: partes[1] };
-  }
-
-  return {
-    nombres: partes.slice(0, -2).join(' '),
-    apellidos: partes.slice(-2).join(' ')
-  };
-}
-
-function mensajeErrorSupabase(error) {
-  if (!error) return 'Ocurrió un error al conectar con Supabase';
-
-  if (error.code === '23505') {
-    return 'Ya existe un registro con esos datos';
-  }
-
-  if (error.code === '42501') {
-    return 'Supabase bloqueó la operación. Ejecuta el archivo politicas_supabase.sql';
-  }
-
-  return error.message || 'No se pudo completar la operación';
-}
-
-function bloquearFormulario(form, bloqueado) {
-  const boton = form?.querySelector('button[type="submit"], input[type="submit"]');
-
-  if (boton) {
-    boton.disabled = bloqueado;
-    boton.dataset.textoOriginal ??= boton.textContent || boton.value || '';
-
-    if (boton.tagName === 'INPUT') {
-      boton.value = bloqueado ? 'Guardando...' : boton.dataset.textoOriginal;
-    } else {
-      boton.textContent = bloqueado ? 'Guardando...' : boton.dataset.textoOriginal;
-    }
-  }
-}
-
-async function ejecutarOperacion(form, operacion) {
-  bloquearFormulario(form, true);
-
-  try {
-    await operacion();
-  } catch (error) {
-    console.error(error);
-    showToast(mensajeErrorSupabase(error), 'error');
-  } finally {
-    bloquearFormulario(form, false);
-  }
-}
-
 const navbar = document.getElementById('navbar');
 const navLinks = document.getElementById('navLinks');
 const hamburger = document.getElementById('hamburger');
@@ -157,6 +80,42 @@ document.querySelectorAll('.tab-btn').forEach(button => {
   });
 });
 
+// ---------- CONEXIÓN CON SUPABASE ----------
+function obtenerBaseDatos() {
+  if (!window.oromarDb) {
+    throw new Error('No se encontró la conexión con Supabase. Revisa supabase.js y el orden de los scripts.');
+  }
+
+  return window.oromarDb;
+}
+
+function separarNombreCompleto(nombreCompleto) {
+  const partes = String(nombreCompleto || '').trim().split(/\s+/).filter(Boolean);
+
+  if (partes.length <= 1) {
+    return {
+      nombres: partes[0] || 'No indicado',
+      apellidos: 'No indicado'
+    };
+  }
+
+  return {
+    nombres: partes[0],
+    apellidos: partes.slice(1).join(' ')
+  };
+}
+
+function bloquearFormulario(form, bloqueado) {
+  const boton = form?.querySelector('button[type="submit"]');
+  if (!boton) return;
+
+  boton.disabled = bloqueado;
+  boton.dataset.textoOriginal ||= boton.innerHTML;
+  boton.innerHTML = bloqueado
+    ? '<i class="fas fa-spinner fa-spin"></i> Guardando...'
+    : boton.dataset.textoOriginal;
+}
+
 // ---------- REGISTRO DE CLIENTE ----------
 window.registrarCliente = async function (event) {
   if (event) event.preventDefault();
@@ -172,20 +131,26 @@ window.registrarCliente = async function (event) {
   const telefono = document.getElementById('regTelefono')?.value.trim();
   const correo = document.getElementById('regCorreo')?.value.trim();
 
-  await ejecutarOperacion(form, async () => {
-    const supabase = await obtenerSupabase();
-    const { error } = await supabase.rpc('registrar_cliente_publico', {
+  try {
+    bloquearFormulario(form, true);
+
+    const { error } = await obtenerBaseDatos().rpc('registrar_cliente_web', {
       p_nombres: nombres,
       p_apellidos: apellidos,
       p_telefono: telefono,
-      p_correo: correo || null
+      p_correo: correo
     });
 
     if (error) throw error;
 
     showToast('Cliente registrado correctamente', 'success');
     form?.reset();
-  });
+  } catch (error) {
+    console.error('Error al registrar cliente:', error);
+    showToast('No se pudo registrar el cliente', 'error');
+  } finally {
+    bloquearFormulario(form, false);
+  }
 };
 
 // ---------- RESERVAS ----------
@@ -198,22 +163,23 @@ window.enviarReserva = async function (event) {
     return;
   }
 
-  const nombreCompleto = document.getElementById('resNombre')?.value.trim();
+  const nombre = document.getElementById('resNombre')?.value.trim();
   const telefono = document.getElementById('resTelefono')?.value.trim();
   const correo = document.getElementById('resCorreo')?.value.trim();
   const fecha = document.getElementById('resFecha')?.value;
   const hora = document.getElementById('resHora')?.value;
   const personas = Number(document.getElementById('resPersonas')?.value);
   const comentario = document.getElementById('resComentario')?.value.trim();
-  const { nombres, apellidos } = separarNombreCompleto(nombreCompleto);
+  const { nombres, apellidos } = separarNombreCompleto(nombre);
 
-  await ejecutarOperacion(form, async () => {
-    const supabase = await obtenerSupabase();
-    const { error } = await supabase.rpc('registrar_reserva_publica', {
+  try {
+    bloquearFormulario(form, true);
+
+    const { error } = await obtenerBaseDatos().rpc('crear_reserva_web', {
       p_nombres: nombres,
       p_apellidos: apellidos,
       p_telefono: telefono,
-      p_correo: correo || null,
+      p_correo: correo,
       p_fecha: fecha,
       p_hora: hora,
       p_cantidad_personas: personas,
@@ -224,24 +190,24 @@ window.enviarReserva = async function (event) {
 
     const mensaje =
       `Reserva OroMar\n\n` +
-      `Nombre: ${nombreCompleto}\n` +
+      `Nombre: ${nombre}\n` +
       `Teléfono: ${telefono}\n` +
-      `Correo: ${correo || 'No indicado'}\n` +
+      `Correo: ${correo}\n` +
       `Fecha: ${fecha}\n` +
       `Hora: ${hora}\n` +
       `Personas: ${personas}\n` +
       (comentario ? `Nota: ${comentario}\n` : '') +
-      `\nLa reserva ya fue registrada en el sistema.`;
+      `\nConfirma nuestra reserva, por favor.`;
 
-    showToast('Reserva registrada correctamente', 'success');
+    window.open(`https://wa.me/51944123456?text=${encodeURIComponent(mensaje)}`, '_blank');
+    showToast('Reserva guardada y enviada a WhatsApp', 'success');
     form?.reset();
-
-    window.open(
-      `https://wa.me/51944123456?text=${encodeURIComponent(mensaje)}`,
-      '_blank',
-      'noopener,noreferrer'
-    );
-  });
+  } catch (error) {
+    console.error('Error al registrar reserva:', error);
+    showToast('No se pudo registrar la reserva', 'error');
+  } finally {
+    bloquearFormulario(form, false);
+  }
 };
 
 // ---------- CALIFICACIÓN ----------
@@ -266,24 +232,25 @@ window.guardarComentario = async function (event) {
     return;
   }
 
-  const nombreCompleto = document.getElementById('comNombre')?.value.trim();
+  const nombre = document.getElementById('comNombre')?.value.trim();
   const telefono = document.getElementById('comTel')?.value.trim();
   const correo = document.getElementById('comCorreo')?.value.trim();
   const texto = document.getElementById('comTexto')?.value.trim();
-  const { nombres, apellidos } = separarNombreCompleto(nombreCompleto);
+  const { nombres, apellidos } = separarNombreCompleto(nombre);
 
   if (selectedStars === 0) {
     showToast('Selecciona una calificación de 1 a 5 estrellas', 'error');
     return;
   }
 
-  await ejecutarOperacion(form, async () => {
-    const supabase = await obtenerSupabase();
-    const { error } = await supabase.rpc('registrar_comentario_publico', {
+  try {
+    bloquearFormulario(form, true);
+
+    const { error } = await obtenerBaseDatos().rpc('crear_comentario_web', {
       p_nombres: nombres,
       p_apellidos: apellidos,
       p_telefono: telefono,
-      p_correo: correo || null,
+      p_correo: correo,
       p_comentario: texto,
       p_calificacion: selectedStars
     });
@@ -294,7 +261,12 @@ window.guardarComentario = async function (event) {
     form?.reset();
     selectedStars = 0;
     document.querySelectorAll('#starRating span').forEach(item => item.classList.remove('active'));
-  });
+  } catch (error) {
+    console.error('Error al guardar comentario:', error);
+    showToast('No se pudo guardar la reseña', 'error');
+  } finally {
+    bloquearFormulario(form, false);
+  }
 };
 
 // ---------- CONTACTO ----------
@@ -307,19 +279,20 @@ window.enviarContacto = async function (event) {
     return;
   }
 
-  const nombreCompleto = document.getElementById('ctaNombre')?.value.trim();
+  const nombre = document.getElementById('ctaNombre')?.value.trim();
   const telefono = document.getElementById('ctaTel')?.value.trim();
   const correo = document.getElementById('ctaCorreo')?.value.trim();
   const mensaje = document.getElementById('ctaMensaje')?.value.trim();
-  const { nombres, apellidos } = separarNombreCompleto(nombreCompleto);
+  const { nombres, apellidos } = separarNombreCompleto(nombre);
 
-  await ejecutarOperacion(form, async () => {
-    const supabase = await obtenerSupabase();
-    const { error } = await supabase.rpc('registrar_contacto_publico', {
+  try {
+    bloquearFormulario(form, true);
+
+    const { error } = await obtenerBaseDatos().rpc('crear_contacto_web', {
       p_nombres: nombres,
       p_apellidos: apellidos,
       p_telefono: telefono,
-      p_correo: correo || null,
+      p_correo: correo,
       p_mensaje: mensaje
     });
 
@@ -327,22 +300,21 @@ window.enviarContacto = async function (event) {
 
     const texto =
       `Contacto OroMar\n\n` +
-      `Nombre: ${nombreCompleto}\n` +
+      `Nombre: ${nombre}\n` +
       `Teléfono: ${telefono}\n` +
-      `Correo: ${correo || 'No indicado'}\n\n` +
+      `Correo: ${correo}\n\n` +
       `Mensaje: ${mensaje}`;
 
-    showToast('Mensaje registrado correctamente', 'success');
+    window.open(`https://wa.me/51944123456?text=${encodeURIComponent(texto)}`, '_blank');
+    showToast('Mensaje guardado y enviado', 'success');
     form?.reset();
-
-    window.open(
-      `https://wa.me/51944123456?text=${encodeURIComponent(texto)}`,
-      '_blank',
-      'noopener,noreferrer'
-    );
-  });
+  } catch (error) {
+    console.error('Error al guardar contacto:', error);
+    showToast('No se pudo enviar el mensaje', 'error');
+  } finally {
+    bloquearFormulario(form, false);
+  }
 };
-
 
 
 window.openWhatsApp = function () {
