@@ -118,7 +118,7 @@ window.registrarCliente = async function (event) {
   const correo = document.getElementById('regCorreo')?.value.trim();
 
   try {
-    await guardarEnSupabase('Cliente', { nombres, apellidos, telefono, correo });
+    await guardarEnSupabase('cliente', { nombres, apellidos, telefono, correo });
     showToast('Cliente registrado correctamente', 'success');
     form?.reset();
   } catch (error) {
@@ -146,7 +146,7 @@ window.enviarReserva = async function (event) {
   const comentario = document.getElementById('resComentario')?.value.trim();
 
   try {
-    await guardarEnSupabase('Reserva', {
+    await guardarEnSupabase('reserva', {
       nombre, telefono, correo, fecha, hora,
       cantidad_personas: Number(personas),
       comentario
@@ -206,7 +206,7 @@ window.guardarComentario = async function (event) {
   }
 
   try {
-    await guardarEnSupabase('Comentario', {
+    await guardarEnSupabase('comentario', {
       nombre, telefono, correo,
       comentario: texto,
       calificacion: selectedStars
@@ -238,7 +238,7 @@ window.enviarContacto = async function (event) {
   const mensaje = document.getElementById('ctaMensaje')?.value.trim();
 
   try {
-    await guardarEnSupabase('Contacto', { nombre, telefono, correo, mensaje });
+    await guardarEnSupabase('contacto', { nombre, telefono, correo, mensaje });
   } catch (error) {
     console.error(error);
     showToast('No se pudo guardar el mensaje en el sistema', 'error');
