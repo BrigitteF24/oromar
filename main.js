@@ -2,6 +2,28 @@
 //   OroMar – main.js | Web pública informativa
 // ============================================================
 
+// ---------- CONEXIÓN A LA BASE DE DATOS (Supabase) ----------
+const SUPABASE_URL = 'https://wkdzfqalppmxggnrswsj.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_qoIPhZlxjxGjWCxfrtjK2A_HwfCADsb';
+
+async function guardarEnSupabase(tabla, datos) {
+  const respuesta = await fetch(`${SUPABASE_URL}/rest/v1/${tabla}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(datos)
+  });
+
+  if (!respuesta.ok) {
+    const error = await respuesta.text();
+    throw new Error(error);
+  }
+}
+
 const navbar = document.getElementById('navbar');
 const navLinks = document.getElementById('navLinks');
 const hamburger = document.getElementById('hamburger');
@@ -81,7 +103,7 @@ document.querySelectorAll('.tab-btn').forEach(button => {
 });
 
 // ---------- REGISTRO DE CLIENTE ----------
-window.registrarCliente = function (event) {
+window.registrarCliente = async function (event) {
   if (event) event.preventDefault();
   const form = document.getElementById('formRegistroCliente');
 
@@ -95,23 +117,18 @@ window.registrarCliente = function (event) {
   const telefono = document.getElementById('regTelefono')?.value.trim();
   const correo = document.getElementById('regCorreo')?.value.trim();
 
-  const clientes = JSON.parse(localStorage.getItem('oromar_clientes') || '[]');
-  const existe = clientes.some(cliente => cliente.telefono === telefono || cliente.correo.toLowerCase() === correo.toLowerCase());
-
-  if (existe) {
-    showToast('Este cliente ya está registrado', 'error');
-    return;
+  try {
+    await guardarEnSupabase('Cliente', { nombres, apellidos, telefono, correo });
+    showToast('Cliente registrado correctamente', 'success');
+    form?.reset();
+  } catch (error) {
+    console.error(error);
+    showToast('No se pudo registrar el cliente', 'error');
   }
-
-  clientes.push({ nombres, apellidos, telefono, correo, fecha_registro: new Date().toISOString() });
-  localStorage.setItem('oromar_clientes', JSON.stringify(clientes));
-
-  showToast('Cliente registrado correctamente', 'success');
-  form?.reset();
 };
 
 // ---------- RESERVAS ----------
-window.enviarReserva = function (event) {
+window.enviarReserva = async function (event) {
   if (event) event.preventDefault();
   const form = document.getElementById('formReserva');
 
@@ -128,6 +145,18 @@ window.enviarReserva = function (event) {
   const personas = document.getElementById('resPersonas')?.value;
   const comentario = document.getElementById('resComentario')?.value.trim();
 
+  try {
+    await guardarEnSupabase('Reserva', {
+      nombre, telefono, correo, fecha, hora,
+      cantidad_personas: Number(personas),
+      comentario
+    });
+  } catch (error) {
+    console.error(error);
+    showToast('No se pudo guardar la reserva en el sistema', 'error');
+    return;
+  }
+
   const mensaje =
     `Reserva OroMar\n\n` +
     `Nombre: ${nombre}\n` +
@@ -140,7 +169,7 @@ window.enviarReserva = function (event) {
     `\nConfirma nuestra reserva, por favor.`;
 
   window.open(`https://wa.me/51944123456?text=${encodeURIComponent(mensaje)}`, '_blank');
-  showToast('Reserva enviada a WhatsApp', 'success');
+  showToast('Reserva guardada y enviada a WhatsApp', 'success');
   form?.reset();
 };
 
@@ -157,7 +186,7 @@ document.querySelectorAll('#starRating span').forEach(star => {
 });
 
 // ---------- COMENTARIOS ----------
-window.guardarComentario = function (event) {
+window.guardarComentario = async function (event) {
   if (event) event.preventDefault();
   const form = document.getElementById('formComentario');
 
@@ -176,18 +205,25 @@ window.guardarComentario = function (event) {
     return;
   }
 
-  const comentarios = JSON.parse(localStorage.getItem('oromar_comentarios') || '[]');
-  comentarios.push({ nombre, telefono, correo, texto, calificacion: selectedStars, fecha: new Date().toISOString() });
-  localStorage.setItem('oromar_comentarios', JSON.stringify(comentarios));
+  try {
+    await guardarEnSupabase('Comentario', {
+      nombre, telefono, correo,
+      comentario: texto,
+      calificacion: selectedStars
+    });
 
-  showToast('Gracias por tu reseña', 'success');
-  form?.reset();
-  selectedStars = 0;
-  document.querySelectorAll('#starRating span').forEach(item => item.classList.remove('active'));
+    showToast('Gracias por tu reseña', 'success');
+    form?.reset();
+    selectedStars = 0;
+    document.querySelectorAll('#starRating span').forEach(item => item.classList.remove('active'));
+  } catch (error) {
+    console.error(error);
+    showToast('No se pudo guardar tu reseña', 'error');
+  }
 };
 
 // ---------- CONTACTO ----------
-window.enviarContacto = function (event) {
+window.enviarContacto = async function (event) {
   if (event) event.preventDefault();
   const form = document.getElementById('formContacto');
 
@@ -201,6 +237,14 @@ window.enviarContacto = function (event) {
   const correo = document.getElementById('ctaCorreo')?.value.trim();
   const mensaje = document.getElementById('ctaMensaje')?.value.trim();
 
+  try {
+    await guardarEnSupabase('Contacto', { nombre, telefono, correo, mensaje });
+  } catch (error) {
+    console.error(error);
+    showToast('No se pudo guardar el mensaje en el sistema', 'error');
+    return;
+  }
+
   const texto =
     `Contacto OroMar\n\n` +
     `Nombre: ${nombre}\n` +
@@ -209,7 +253,7 @@ window.enviarContacto = function (event) {
     `Mensaje: ${mensaje}`;
 
   window.open(`https://wa.me/51944123456?text=${encodeURIComponent(texto)}`, '_blank');
-  showToast('Mensaje enviado', 'success');
+  showToast('Mensaje guardado y enviado', 'success');
   form?.reset();
 };
 
