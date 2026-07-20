@@ -3,11 +3,6 @@
 // ============================================================
 
 // ---------- CONEXIÓN CON SUPABASE ----------
-// js/supabase.js
-window.SUPABASE_CONFIG = {
-    url: 'https://tbyrwjmmiryrosdaeuir.supabase.co', // La URL de tu proyecto
-    key: 'sb_publishable_4NFqw5dQvpPi0VDBjMn5jQ_5xK3fobI' // Clave pública (anon)
-};  
 async function obtenerSupabase() {
   if (!window.oromarDb) {
     throw new Error(
