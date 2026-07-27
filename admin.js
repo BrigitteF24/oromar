@@ -414,21 +414,57 @@ window.confirmarReserva = async function (id) {
   }
 };
 
-window.cancelarReserva = async function (id) {
-  const ok = await confirmarAccion('¿Seguro que deseas cancelar esta reserva?', 'danger');
-  if (!ok) return;
-  try {
-    const { error } = await obtenerBaseDatos().rpc('actualizar_estado_reserva', { p_id_reserva: id, p_estado: 'Cancelada' });
-    if (error) throw error;
-    cargarReservas();
-    mostrarToast('Reserva cancelada.');
-  } catch (err) {
-    console.error(err);
-    mostrarToast('No se pudo cancelar la reserva.', 'error');
-  }
+window.cancelarReserva = function (id) {
+  abrirModal('🚫 Cancelar reserva', `
+    <form id="formCancelarReserva">
+      <p class="confirm-text" style="margin-bottom:12px">Por favor indica el motivo de la cancelación antes de continuar.</p>
+      <div class="form-group">
+        <label>Motivo de cancelación *</label>
+        <textarea id="crMotivo" required placeholder="Ej: el cliente llamó a cancelar, no llegó a la hora acordada..." autofocus></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-sm btn-secondary" onclick="cerrarModal()">No, volver</button>
+        <button type="submit" class="btn-sm btn-danger">Sí, cancelar reserva</button>
+      </div>
+    </form>
+  `);
+
+  document.getElementById('formCancelarReserva').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const motivo = document.getElementById('crMotivo').value.trim();
+    try {
+      const { error } = await obtenerBaseDatos().rpc('cancelar_reserva', { p_id_reserva: id, p_motivo: motivo });
+      if (error) throw error;
+      cerrarModal();
+      cargarReservas();
+      mostrarToast('Reserva cancelada.');
+    } catch (err) {
+      console.error(err);
+      mostrarToast('No se pudo cancelar la reserva.', 'error');
+    }
+  });
 };
 
-window.addReserva = function () {
+async function obtenerOpcionesMesaReserva(idMesaSeleccionada) {
+  try {
+    const { data, error } = await obtenerBaseDatos().rpc('listar_mesas');
+    if (error) throw error;
+    const mesas = data || [];
+    const opciones = mesas.map(m => {
+      const ocupable = m.estado === 'Disponible' || m.id_mesa === idMesaSeleccionada;
+      const etiqueta = m.id_mesa === idMesaSeleccionada ? '' : (m.estado !== 'Disponible' ? ` (${m.estado})` : '');
+      return `<option value="${m.id_mesa}" ${m.id_mesa === idMesaSeleccionada ? 'selected' : ''} ${!ocupable ? 'disabled' : ''}>Mesa ${m.numero}${etiqueta}</option>`;
+    }).join('');
+    return `<option value="">Sin asignar</option>${opciones}`;
+  } catch (err) {
+    console.error('Error al cargar mesas para la reserva:', err);
+    return '<option value="">Sin asignar</option>';
+  }
+}
+
+window.addReserva = async function () {
+  const opcionesMesa = await obtenerOpcionesMesaReserva(null);
+
   abrirModal('📅 Nueva reserva', `
     <form id="formReserva">
       <div class="form-row">
@@ -440,7 +476,10 @@ window.addReserva = function () {
         <div class="form-group"><label>Fecha *</label><input type="date" id="rFecha" required></div>
         <div class="form-group"><label>Hora *</label><input type="time" id="rHora" required></div>
       </div>
-      <div class="form-group"><label>Cantidad de personas *</label><input type="number" id="rPersonas" min="1" max="20" value="2" required></div>
+      <div class="form-row">
+        <div class="form-group"><label>Cantidad de personas *</label><input type="number" id="rPersonas" min="1" max="20" value="2" required></div>
+        <div class="form-group"><label>Mesa (opcional)</label><select id="rMesa">${opcionesMesa}</select></div>
+      </div>
       <div class="form-group"><label>Observación (opcional)</label><textarea id="rObservacion" placeholder="Ej: mesa cerca a la ventana, cumpleaños..."></textarea></div>
       <div class="modal-actions">
         <button type="button" class="btn-sm btn-secondary" onclick="cerrarModal()">Cancelar</button>
@@ -458,12 +497,14 @@ window.addReserva = function () {
     const hora = document.getElementById('rHora').value;
     const personas = Number(document.getElementById('rPersonas').value);
     const observacion = document.getElementById('rObservacion').value.trim() || null;
+    const idMesaVal = document.getElementById('rMesa').value;
+    const idMesa = idMesaVal ? Number(idMesaVal) : null;
 
     try {
       const { error } = await obtenerBaseDatos().rpc('crear_reserva_admin', {
         p_nombres: nombres, p_apellidos: apellidos, p_telefono: telefono,
         p_correo: null, p_fecha: fecha, p_hora: hora,
-        p_cantidad_personas: personas, p_observacion: observacion, p_id_mesa: null
+        p_cantidad_personas: personas, p_observacion: observacion, p_id_mesa: idMesa
       });
       if (error) throw error;
       cerrarModal();
@@ -476,9 +517,11 @@ window.addReserva = function () {
   });
 };
 
-window.editarReserva = function (id) {
+window.editarReserva = async function (id) {
   const r = reservasCache.find(x => x.id_reserva === id);
   if (!r) return;
+
+  const opcionesMesa = await obtenerOpcionesMesaReserva(r.id_mesa || null);
 
   abrirModal('✏️ Editar reserva', `
     <form id="formEditarReserva">
@@ -487,7 +530,10 @@ window.editarReserva = function (id) {
         <div class="form-group"><label>Fecha *</label><input type="date" id="eFecha" value="${r.fecha}" required></div>
         <div class="form-group"><label>Hora *</label><input type="time" id="eHora" value="${r.hora}" required></div>
       </div>
-      <div class="form-group"><label>Cantidad de personas *</label><input type="number" id="ePersonas" min="1" max="20" value="${r.cantidad_personas}" required></div>
+      <div class="form-row">
+        <div class="form-group"><label>Cantidad de personas *</label><input type="number" id="ePersonas" min="1" max="20" value="${r.cantidad_personas}" required></div>
+        <div class="form-group"><label>Mesa (opcional)</label><select id="eMesa">${opcionesMesa}</select></div>
+      </div>
       <div class="form-group"><label>Observación (opcional)</label><textarea id="eObservacion">${r.observacion || ''}</textarea></div>
       <div class="modal-actions">
         <button type="button" class="btn-sm btn-secondary" onclick="cerrarModal()">Cancelar</button>
@@ -502,11 +548,13 @@ window.editarReserva = function (id) {
     const hora = document.getElementById('eHora').value;
     const personas = Number(document.getElementById('ePersonas').value);
     const observacion = document.getElementById('eObservacion').value.trim() || null;
+    const idMesaVal = document.getElementById('eMesa').value;
+    const idMesa = idMesaVal ? Number(idMesaVal) : null;
 
     try {
       const { error } = await obtenerBaseDatos().rpc('editar_reserva', {
         p_id_reserva: id, p_fecha: fecha, p_hora: hora,
-        p_cantidad_personas: personas, p_observacion: observacion
+        p_cantidad_personas: personas, p_observacion: observacion, p_id_mesa: idMesa
       });
       if (error) throw error;
       cerrarModal();
@@ -564,11 +612,52 @@ function accionPedido(p) {
   if (p.estado === 'Pendiente') acciones += `<button class="btn-sm btn-success" onclick="avanzarPedido(${p.id_pedido},'En preparacion')">Preparar</button> `;
   else if (p.estado === 'En preparacion') acciones += `<button class="btn-sm btn-success" onclick="avanzarPedido(${p.id_pedido},'Atendido')">Listo</button> `;
   else if (p.estado === 'Atendido') acciones += `<button class="btn-sm btn-primary" onclick="cobrarPedido(${p.id_pedido},${p.total})">Cobrar</button> `;
+  acciones += `<button class="btn-sm btn-secondary" onclick="actualizarEstadoPedidoManual(${p.id_pedido})">Actualizar estado</button> `;
   acciones += `<button class="btn-sm btn-secondary" onclick="editarPedido(${p.id_pedido})">Editar</button> `;
   acciones += `<button class="btn-sm btn-danger" onclick="cancelarPedido(${p.id_pedido})">Cancelar</button> `;
   acciones += `<button class="btn-sm btn-danger" onclick="eliminarPedido(${p.id_pedido})">Eliminar</button>`;
   return acciones;
 }
+
+// Permite fijar manualmente cualquier estado válido del pedido,
+// además de los botones rápidos (Preparar/Listo/Cobrar) de arriba.
+window.actualizarEstadoPedidoManual = function (id) {
+  const p = pedidosCache.find(x => x.id_pedido === id);
+  if (!p) return;
+
+  const estados = ['Pendiente', 'En preparacion', 'Atendido', 'Cancelado'];
+  const etiqueta = { 'Pendiente': 'Pendiente', 'En preparacion': 'En preparación', 'Atendido': 'Atendido', 'Cancelado': 'Cancelado' };
+  const opciones = estados.map(es => `<option value="${es}" ${es === p.estado ? 'selected' : ''}>${etiqueta[es]}</option>`).join('');
+
+  abrirModal('🔄 Actualizar estado del pedido', `
+    <div class="modal-readonly">Pedido #${p.id_pedido} — ${p.mesas} — ${money(p.total)}</div>
+    <form id="formEstadoPedido">
+      <div class="form-group">
+        <label>Nuevo estado *</label>
+        <select id="uepEstado" required>${opciones}</select>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-sm btn-secondary" onclick="cerrarModal()">Cancelar</button>
+        <button type="submit" class="btn-sm btn-primary">Actualizar</button>
+      </div>
+    </form>
+  `);
+
+  document.getElementById('formEstadoPedido').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nuevoEstado = document.getElementById('uepEstado').value;
+    try {
+      const { error } = await obtenerBaseDatos().rpc('actualizar_estado_pedido', { p_id_pedido: id, p_estado: nuevoEstado });
+      if (error) throw error;
+      cerrarModal();
+      cargarPedidos();
+      mostrarToast(`Pedido #${id} → ${etiqueta[nuevoEstado]}`);
+    } catch (err) {
+      console.error(err);
+      mostrarToast('No se pudo actualizar el estado del pedido.', 'error');
+    }
+  });
+};
 
 window.avanzarPedido = async function (id, estado) {
   try {
@@ -731,6 +820,10 @@ window.addPedido = async function () {
     mostrarToast('No hay platos activos en la carta para agregar a un pedido.', 'error');
     return;
   }
+  if (!catalogo.mesas.length) {
+    mostrarToast('No hay mesas registradas. Revisa el módulo Mesas.', 'error');
+    return;
+  }
 
   pPlatosCatalogo = catalogo.productos;
   pFilaContador = 0;
@@ -742,7 +835,7 @@ window.addPedido = async function () {
     <form id="formPedido">
       <div class="form-row">
         <div class="form-group"><label>Mesero *</label><select id="pMesero" required>${opcionesMesero}</select></div>
-        <div class="form-group"><label>Mesa</label><select id="pMesa"><option value="">Para llevar</option>${opcionesMesa}</select></div>
+        <div class="form-group"><label>Mesa *</label><select id="pMesa" required>${opcionesMesa}</select></div>
       </div>
       <div class="form-group">
         <label>Estado inicial</label>
@@ -819,7 +912,7 @@ window.editarPedido = async function (id) {
     <form id="formEditarPedido">
       <div class="form-row">
         <div class="form-group"><label>Mesero *</label><select id="epMesero" required>${opcionesMesero}</select></div>
-        <div class="form-group"><label>Mesa</label><select id="epMesa"><option value="">Para llevar</option>${opcionesMesa}</select></div>
+        <div class="form-group"><label>Mesa *</label><select id="epMesa" required>${opcionesMesa}</select></div>
       </div>
       <div class="form-group"><label>Estado</label><select id="epEstado">${opcionesEstado}</select></div>
       <div class="modal-actions">
@@ -885,6 +978,73 @@ async function cargarPagos() {
     console.error('Error al cargar pagos:', err);
   }
 }
+
+window.addPago = async function () {
+  let pedidos;
+  try {
+    const { data, error } = await obtenerBaseDatos().rpc('listar_pedidos_pendientes_pago');
+    if (error) throw error;
+    pedidos = data || [];
+  } catch (err) {
+    console.error(err);
+    mostrarToast('No se pudieron cargar los pedidos pendientes de pago.', 'error');
+    return;
+  }
+
+  if (!pedidos.length) {
+    mostrarToast('No hay pedidos pendientes de pago en este momento.', 'error');
+    return;
+  }
+
+  const opciones = pedidos.map(p => `<option value="${p.id_pedido}" data-monto="${p.total}">#${p.id_pedido} — ${p.mesas} — ${money(p.total)}</option>`).join('');
+
+  abrirModal('💳 Agregar pago', `
+    <form id="formAgregarPago">
+      <div class="form-group">
+        <label>Pedido *</label>
+        <select id="apPedido" required onchange="document.getElementById('apMonto').value = this.selectedOptions[0].dataset.monto">${opciones}</select>
+      </div>
+      <div class="form-group">
+        <label>Monto (S/.) *</label>
+        <input type="number" id="apMonto" step="0.10" min="0.10" value="${pedidos[0].total}" required>
+      </div>
+      <div class="form-group">
+        <label>Método de pago *</label>
+        <select id="apMetodo" required>
+          <option value="Efectivo">Efectivo</option>
+          <option value="Yape">Yape</option>
+          <option value="Plin">Plin</option>
+          <option value="Tarjeta">Tarjeta</option>
+          <option value="Transferencia">Transferencia</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-sm btn-secondary" onclick="cerrarModal()">Cancelar</button>
+        <button type="submit" class="btn-sm btn-primary">Registrar pago</button>
+      </div>
+    </form>
+  `);
+
+  document.getElementById('formAgregarPago').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const idPedido = Number(document.getElementById('apPedido').value);
+    const monto = Number(document.getElementById('apMonto').value);
+    const metodo = document.getElementById('apMetodo').value;
+
+    try {
+      const { error } = await obtenerBaseDatos().rpc('registrar_pago', {
+        p_id_pedido: idPedido, p_monto: monto, p_metodo: metodo
+      });
+      if (error) throw error;
+      cerrarModal();
+      cargarPagos();
+      mostrarToast(`Pago de ${money(monto)} registrado correctamente 🎉`);
+    } catch (err) {
+      console.error(err);
+      mostrarToast('No se pudo registrar el pago.', 'error');
+    }
+  });
+};
 
 // ---------- INVENTARIO ----------
 function esAdministrador() {
@@ -1294,24 +1454,73 @@ window.toggleMesa = async function (idMesa) {
 };
 
 // ---------- CLIENTES ----------
+let clientesCache = [];
+let clientesFiltro = { texto: '', soloConVisitas: false };
+
 async function cargarClientes() {
   try {
     const { data, error } = await obtenerBaseDatos().rpc('listar_clientes');
     if (error) throw error;
-
-    const tbody = document.querySelector('#mod-clientes tbody');
-    tbody.innerHTML = (data || []).map(c => `
-      <tr>
-        <td>#C${String(c.id_cliente).padStart(3, '0')}</td>
-        <td>${c.nombres} ${c.apellidos}</td>
-        <td>${c.telefono}</td>
-        <td>${c.visitas}</td>
-        <td>${c.correo || '-'}</td>
-      </tr>`).join('') || '<tr><td colspan="5">Sin clientes registrados</td></tr>';
+    clientesCache = data || [];
+    renderClientes();
   } catch (err) {
     console.error('Error al cargar clientes:', err);
   }
 }
+
+function renderClientes() {
+  const tbody = document.querySelector('#mod-clientes tbody');
+  const texto = clientesFiltro.texto.trim().toLowerCase();
+
+  const filtrados = clientesCache.filter(c => {
+    if (clientesFiltro.soloConVisitas && !(c.visitas > 0)) return false;
+    if (!texto) return true;
+    const campo = `${c.nombres} ${c.apellidos} ${c.telefono} ${c.correo || ''}`.toLowerCase();
+    return campo.includes(texto);
+  });
+
+  tbody.innerHTML = filtrados.map(c => `
+    <tr>
+      <td>#C${String(c.id_cliente).padStart(3, '0')}</td>
+      <td>${c.nombres} ${c.apellidos}</td>
+      <td>${c.telefono}</td>
+      <td>${c.visitas}</td>
+      <td>${c.correo || '-'}</td>
+    </tr>`).join('') || '<tr><td colspan="5">Sin clientes que coincidan con el filtro</td></tr>';
+}
+
+window.filtrarClientes = function () {
+  abrirModal('🔍 Filtrar clientes', `
+    <form id="formFiltroClientes">
+      <div class="form-group">
+        <label>Buscar por nombre, teléfono o correo</label>
+        <input type="text" id="fcTexto" value="${clientesFiltro.texto}" placeholder="Ej: Quispe, 9xx..." autofocus>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;gap:8px">
+        <input type="checkbox" id="fcVisitas" ${clientesFiltro.soloConVisitas ? 'checked' : ''} style="width:auto">
+        <label style="margin:0" for="fcVisitas">Mostrar solo clientes con al menos 1 visita/reserva</label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-sm btn-secondary" onclick="limpiarFiltroClientes()">Limpiar filtro</button>
+        <button type="submit" class="btn-sm btn-primary">Aplicar filtro</button>
+      </div>
+    </form>
+  `);
+
+  document.getElementById('formFiltroClientes').addEventListener('submit', (e) => {
+    e.preventDefault();
+    clientesFiltro.texto = document.getElementById('fcTexto').value;
+    clientesFiltro.soloConVisitas = document.getElementById('fcVisitas').checked;
+    cerrarModal();
+    renderClientes();
+  });
+};
+
+window.limpiarFiltroClientes = function () {
+  clientesFiltro = { texto: '', soloConVisitas: false };
+  cerrarModal();
+  renderClientes();
+};
 
 // ---------- COMENTARIOS ----------
 async function cargarComentarios() {
@@ -1329,7 +1538,7 @@ async function cargarComentarios() {
         <td>${badgeEstado(c.estado)}</td>
         <td>
           ${c.estado === 'Pendiente' ? `<button class="btn-sm btn-success" onclick="responderComentario(${c.id_comentario})">Aprobar</button>` : ''}
-          <button class="btn-sm btn-danger" onclick="ocultarComentario(${c.id_comentario})">Ocultar</button>
+          <button class="btn-sm btn-danger" onclick="eliminarComentario(${c.id_comentario})">Eliminar</button>
         </td>
       </tr>`).join('') || '<tr><td colspan="6">Sin reseñas todavía</td></tr>';
   } catch (err) {
@@ -1367,17 +1576,17 @@ window.responderComentario = function (id) {
   });
 };
 
-window.ocultarComentario = async function (id) {
-  const ok = await confirmarAccion('¿Ocultar esta reseña del sitio público?', 'danger');
+window.eliminarComentario = async function (id) {
+  const ok = await confirmarAccion('¿Deseas eliminar esta reseña? Esta acción no se puede deshacer.', 'danger');
   if (!ok) return;
   try {
-    const { error } = await obtenerBaseDatos().rpc('ocultar_comentario', { p_id_comentario: id });
+    const { error } = await obtenerBaseDatos().rpc('eliminar_comentario', { p_id_comentario: id });
     if (error) throw error;
     cargarComentarios();
-    mostrarToast('Reseña ocultada.');
+    mostrarToast('Reseña eliminada.');
   } catch (err) {
     console.error(err);
-    mostrarToast('No se pudo ocultar la reseña.', 'error');
+    mostrarToast('No se pudo eliminar la reseña.', 'error');
   }
 };
 
@@ -1398,19 +1607,87 @@ async function cargarUsuarios() {
         <td>${u.nombre_rol}</td>
         <td>${badgeEstado(u.estado)}</td>
         <td>
+          <button class="btn-sm btn-secondary" onclick="editarUsuario(${u.id_usuario})">Editar</button>
           ${u.id_usuario === sesion?.id_usuario
-        ? '<span style="font-size:12px;color:#999">Tu usuario</span>'
+        ? ''
         : (u.estado === 'Activo'
           ? `<button class="btn-sm btn-danger" onclick="cambiarEstadoUsuario(${u.id_usuario},'Inactivo')">Desactivar</button>`
           : `<button class="btn-sm btn-success" onclick="cambiarEstadoUsuario(${u.id_usuario},'Activo')">Activar</button>`)
       }
         </td>
       </tr>`).join('') || '<tr><td colspan="6">Sin usuarios registrados</td></tr>';
+
+    window._usuariosCache = data || [];
   } catch (err) {
     console.error('Error al cargar usuarios:', err);
     mostrarToast('No se pudo cargar la lista de usuarios. Verifica que ejecutaste supabase/04_gestion_usuarios.sql en Supabase.', 'error');
   }
 }
+
+// Editar usuario: cambiar contraseña y/o rol. La base de datos vuelve
+// a validar que quien ejecuta la acción sea Administrador; en el panel
+// el módulo "usuarios" ya es exclusivo de ese rol (ver ROLE_MODULES).
+window.editarUsuario = async function (id) {
+  const sesion = obtenerSesion();
+  if (sesion?.nombre_rol !== 'Administrador') {
+    mostrarToast('Solo un Administrador puede editar usuarios.', 'error');
+    return;
+  }
+
+  const usuario = (window._usuariosCache || []).find(u => u.id_usuario === id);
+  if (!usuario) return;
+
+  let roles;
+  try {
+    const { data, error } = await obtenerBaseDatos().rpc('listar_roles');
+    if (error) throw error;
+    roles = data || [];
+  } catch (err) {
+    console.error(err);
+    mostrarToast('No se pudieron cargar los roles.', 'error');
+    return;
+  }
+
+  const opcionesRol = roles.map(r => `<option value="${r.id_rol}" ${r.id_rol === usuario.id_rol ? 'selected' : ''}>${r.nombre_rol}</option>`).join('');
+
+  abrirModal('🔐 Editar usuario', `
+    <div class="modal-readonly">${usuario.nombres} ${usuario.apellidos} (@${usuario.usuario})</div>
+    <form id="formEditarUsuario">
+      <div class="form-group"><label>Rol</label><select id="euRol">${opcionesRol}</select></div>
+      <div class="form-group">
+        <label>Nueva contraseña (opcional)</label>
+        <input type="password" id="euPassword" minlength="4" placeholder="Dejar en blanco para no cambiarla">
+        <span class="form-hint">Mínimo 4 caracteres. Solo se actualiza si escribes algo aquí.</span>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-sm btn-secondary" onclick="cerrarModal()">Cancelar</button>
+        <button type="submit" class="btn-sm btn-primary">Guardar cambios</button>
+      </div>
+    </form>
+  `);
+
+  document.getElementById('formEditarUsuario').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const idRol = Number(document.getElementById('euRol').value);
+    const password = document.getElementById('euPassword').value;
+
+    try {
+      const { error } = await obtenerBaseDatos().rpc('editar_usuario_staff', {
+        p_id_usuario_actor: sesion.id_usuario,
+        p_id_usuario: id,
+        p_password: password || null,
+        p_id_rol: idRol
+      });
+      if (error) throw error;
+      cerrarModal();
+      cargarUsuarios();
+      mostrarToast('Usuario actualizado correctamente.');
+    } catch (err) {
+      console.error(err);
+      mostrarToast(err?.message || 'No se pudo actualizar el usuario.', 'error');
+    }
+  });
+};
 
 window.cambiarEstadoUsuario = async function (id, estado) {
   const ok = await confirmarAccion(

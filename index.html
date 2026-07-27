@@ -26,6 +26,11 @@
       <li><a href="#reservas" class="nav-link">Reservas</a></li>
       <li><a href="#nosotros" class="nav-link">Nosotros</a></li>
       <li><a href="#contacto" class="nav-link">Contacto</a></li>
+      <li class="nav-item-campestre">
+        <button type="button" class="nav-campestre-btn" id="btnModoCampestre" onclick="toggleModoCampestre()">
+          <span id="campestreIcon">🌿</span> <span id="campestreLabel">Modo Campestre</span>
+        </button>
+      </li>
       <li><a href="#registro" class="nav-link nav-register">Regístrate</a></li>
     </ul>
     <button class="hamburger" id="hamburger">
@@ -460,7 +465,7 @@
       <p class="section-eyebrow">Opiniones</p>
       <h2 class="section-title">¿Qué dicen nuestros <span class="highlight">clientes</span>?</h2>
     </div>
-    <div class="comentarios-grid">
+    <div class="comentarios-grid" id="comentariosGrid">
       <div class="comentario-card">
         <div class="stars">⭐⭐⭐⭐⭐</div>
         <p>"El ceviche mixto es simplemente espectacular. Ambiente increíble y el servicio de primera. Sin duda el mejor

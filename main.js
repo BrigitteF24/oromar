@@ -34,6 +34,52 @@ document.querySelectorAll('.nav-link').forEach(link => {
   });
 });
 
+// ---------- MODO CAMPESTRE ----------
+const botAvatarEl = document.querySelector('.chat-avatar');
+const botHeaderStrong = document.querySelector('.chat-header strong');
+const botHeaderSmall = document.querySelector('.chat-header small');
+
+function aplicarModoCampestre(activo) {
+  document.body.classList.toggle('modo-campestre', activo);
+
+  const btn = document.getElementById('btnModoCampestre');
+  const icon = document.getElementById('campestreIcon');
+  const label = document.getElementById('campestreLabel');
+  if (btn) btn.classList.toggle('active', activo);
+  if (icon) icon.textContent = activo ? '🏙️' : '🌿';
+  if (label) label.textContent = activo ? 'Modo Elegante' : 'Modo Campestre';
+
+  // El asistente virtual "Oro Bot" también cambia de aire al activarlo.
+  if (botAvatarEl) botAvatarEl.textContent = activo ? '🌾' : '🤖';
+  if (botHeaderStrong) botHeaderStrong.textContent = activo ? 'Oro Bot Campestre' : 'Oro Bot';
+  if (botHeaderSmall) botHeaderSmall.textContent = activo ? 'Tu guía del campo 🌿' : 'Asistente virtual';
+
+  // Si el visitante todavía no conversó con el bot, actualizamos también
+  // el saludo inicial para que combine con el modo activo.
+  const mensajes = document.getElementById('chatMessages');
+  if (mensajes && mensajes.children.length === 1) {
+    mensajes.children[0].innerHTML = activo
+      ? '¡Hola! Soy <strong>Oro Bot</strong>, tu guía campestre 🌾. ¿En qué te ayudo hoy?'
+      : '¡Hola! Soy el asistente de <strong>OroMar</strong>. ¿En qué puedo ayudarte? 🦞';
+  }
+
+  localStorage.setItem('oromar_modo_campestre', activo ? '1' : '0');
+}
+
+window.toggleModoCampestre = function () {
+  const activo = !document.body.classList.contains('modo-campestre');
+  aplicarModoCampestre(activo);
+  showToastCampestre(activo);
+};
+
+function showToastCampestre(activo) {
+  // showToast se define más abajo en este mismo archivo; para cuando
+  // este botón se pulsa, ya existe en el documento.
+  if (typeof showToast === 'function') {
+    showToast(activo ? '🌿 Modo Campestre activado' : '🏙️ Modo Elegante activado', 'success');
+  }
+}
+
 // ---------- PARTICLES ----------
 const particlesContainer = document.getElementById('particles');
 const colors = ['#D4A017', '#F4845F', '#0096C7', '#40916C', '#fbbf24'];
@@ -395,6 +441,91 @@ function showToast(message, type = '') {
   toast.className = 'toast show ' + type;
   setTimeout(() => toast.className = 'toast', 3000);
 }
+
+// ---------- RESEÑAS APROBADAS (con respuesta de OroMar) ----------
+// Cuando el equipo aprueba y responde una reseña en el sistema interno
+// (estado "Respondido"), esa reseña reemplaza las tarjetas de ejemplo
+// aquí en la web, mostrando la respuesta en pequeño debajo del comentario.
+//
+// Si hay más de 3 reseñas aprobadas, se muestran de a 3 y van rotando
+// automáticamente cada cierto tiempo (efecto carrusel), en vez de
+// listarlas todas juntas de forma fija.
+const AVATAR_COLORES_RESENAS = ['#d4af37', '#f59e0b', '#10b981', '#0ea5e9', '#e879f9'];
+let resenasPublicasCache = [];
+let resenasIndiceGrupo = 0;
+let resenasIntervaloRotacion = null;
+
+function tarjetaComentarioHTML(c, i) {
+  const nombre = `${c.nombres || ''} ${c.apellidos || ''}`.trim() || 'Cliente OroMar';
+  const inicial = nombre.charAt(0).toUpperCase();
+  const color = AVATAR_COLORES_RESENAS[i % AVATAR_COLORES_RESENAS.length];
+  const respuesta = (c.respuesta_admin || '').trim();
+
+  return `
+  <div class="comentario-card${i === 1 ? ' featured' : ''}">
+    <div class="stars">${'⭐'.repeat(c.calificacion)}</div>
+    <p>"${c.comentario}"</p>
+    <div class="comentario-autor">
+      <div class="autor-avatar" style="background:${color}">${inicial}</div>
+      <div><strong>${nombre}</strong><small>Cliente OroMar</small></div>
+    </div>
+    ${respuesta ? `<div class="comentario-respuesta"><strong>🌿 Respuesta de OroMar:</strong> ${respuesta}</div>` : ''}
+  </div>`;
+}
+
+function pintarGrupoResenas(grid) {
+  const total = resenasPublicasCache.length;
+  if (!total) return;
+
+  const inicio = (resenasIndiceGrupo * 3) % total;
+  const grupo = [];
+  for (let k = 0; k < Math.min(3, total); k++) {
+    grupo.push(resenasPublicasCache[(inicio + k) % total]);
+  }
+
+  grid.classList.add('resenas-fade');
+  requestAnimationFrame(() => {
+    grid.innerHTML = grupo.map((c, i) => tarjetaComentarioHTML(c, i)).join('');
+    requestAnimationFrame(() => grid.classList.remove('resenas-fade'));
+  });
+}
+
+async function cargarComentariosPublicos() {
+  const grid = document.getElementById('comentariosGrid');
+  if (!grid) return;
+
+  try {
+    const { data, error } = await obtenerBaseDatos().rpc('listar_comentarios_publicos');
+    if (error) throw error;
+    if (!data || !data.length) return; // sin reseñas aprobadas aún: se dejan las tarjetas de ejemplo
+
+    resenasPublicasCache = data;
+    resenasIndiceGrupo = 0;
+    pintarGrupoResenas(grid);
+
+    // Si hay más de 3 reseñas aprobadas, rota entre grupos de 3 cada 6s.
+    if (resenasIntervaloRotacion) clearInterval(resenasIntervaloRotacion);
+    if (data.length > 3) {
+      resenasIntervaloRotacion = setInterval(() => {
+        resenasIndiceGrupo++;
+        pintarGrupoResenas(grid);
+      }, 6000);
+    }
+  } catch (err) {
+    // Si ves este error en la consola (F12 > Console), lo más probable es
+    // que falte ejecutar supabase/08_patch_productos_categorias_resenas.sql
+    // en el SQL Editor de tu proyecto Supabase (esa función crea el RPC
+    // "listar_comentarios_publicos"). Mientras tanto se dejan las tarjetas
+    // de ejemplo tal cual están en el HTML.
+    console.error('Error al cargar reseñas públicas (revisa si aplicaste 08_patch_productos_categorias_resenas.sql en Supabase):', err);
+  }
+}
+
+cargarComentariosPublicos();
+
+// Vuelve a consultar Supabase cada 60s por si el equipo aprueba una
+// reseña nueva mientras alguien tiene la web abierta.
+setInterval(cargarComentariosPublicos, 60000);
 
 // ---------- INIT ----------
 const reservaFecha = document.getElementById('resFecha');

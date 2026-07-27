@@ -8,6 +8,7 @@
   --gold: #d4af37;
   --gold-light: #e8cb5a;
   --gold-dark: #b8941e;
+  --gold-rgb: 212, 175, 55;
   --bg: #0a0f1a;
   --bg2: #050a10;
   --card: #1f2937;
@@ -15,11 +16,63 @@
   --white: #ffffff;
   --text: #ffffff;
   --text-sec: #b0b0b0;
-  --border: rgba(212, 175, 55, 0.18);
+  --border: rgba(var(--gold-rgb), 0.18);
   --radius: 16px;
   --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.35);
-  --shadow-gold: 0 8px 30px rgba(212, 175, 55, 0.25);
+  --shadow-gold: 0 8px 30px rgba(var(--gold-rgb), 0.25);
+  --bg-end-1: #080e18;
+  --bg-end-2: #080e18;
+  --navbar-bg: rgba(5, 10, 16, 0.92);
+  --navbar-bg-scrolled: rgba(5, 10, 16, 0.98);
+  --bg-alt: #050a10;
+}
+
+/* ========== MODO CAMPESTRE (tema alterno) ==========
+   Se activa agregando la clase "modo-campestre" al <body>
+   (ver botón en el navbar y lógica en main.js). Reutiliza las
+   mismas variables CSS, así que todo el sitio cambia de paleta
+   automáticamente sin tocar cada componente.
+   Aquí el tema es claro, cálido y campestre: beige/crema con
+   verde fresco de acento y detalles en marrón madera. */
+body.modo-campestre {
+  --gold: #7a9c3f;
+  --gold-light: #9dc25c;
+  --gold-dark: #5a7a2c;
+  --gold-rgb: 122, 156, 63;
+  --bg: #f3ead9;
+  --bg2: #3a2c1c;
+  --card: #fbf6ea;
+  --card-hover: #f0e6cf;
+  --white: #2c2313;
+  --text: #2c2313;
+  --text-sec: #6f6248;
+  --border: rgba(122, 92, 42, 0.22);
+  --shadow: 0 10px 34px rgba(90, 66, 30, 0.16);
+  --shadow-sm: 0 4px 14px rgba(90, 66, 30, 0.12);
+  --shadow-gold: 0 8px 26px rgba(122, 156, 63, 0.28);
+  --bg-end-1: #e7d8b4;
+  --bg-end-2: #241a10;
+  --navbar-bg: rgba(243, 234, 217, 0.92);
+  --navbar-bg-scrolled: rgba(243, 234, 217, 0.98);
+  --bg-alt: #ece0c8;
+}
+
+body,
+.navbar,
+.hamburger span,
+.btn,
+.chat-widget,
+.chat-header,
+.chat-input-row input,
+.comentario-card,
+.carta-card,
+.gal-item,
+footer,
+.nav-campestre-btn,
+.nav-link,
+.autor-avatar {
+  transition: background-color .4s ease, border-color .4s ease, color .4s ease, box-shadow .4s ease;
 }
 
 /* ========== RESET & BASE ========== */
@@ -54,7 +107,7 @@ select,
 textarea {
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
-  border: 2px solid rgba(212, 175, 55, 0.25);
+  border: 2px solid rgba(var(--gold-rgb), 0.25);
   border-radius: 10px;
   padding: 12px 16px;
   width: 100%;
@@ -91,7 +144,7 @@ select option {
   align-items: center;
   justify-content: space-between;
   padding: 18px 5%;
-  background: rgba(5, 10, 16, 0.92);
+  background: var(--navbar-bg);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
   transition: all .3s;
@@ -99,7 +152,7 @@ select option {
 
 .navbar.scrolled {
   padding: 12px 5%;
-  background: rgba(5, 10, 16, 0.98);
+  background: var(--navbar-bg-scrolled);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -142,7 +195,7 @@ select option {
 .nav-link:hover,
 .nav-link.active {
   color: var(--gold);
-  background: rgba(212, 175, 55, 0.08);
+  background: rgba(var(--gold-rgb), 0.08);
 }
 
 .nav-link.active::after {
@@ -158,8 +211,8 @@ select option {
 }
 
 .nav-admin {
-  background: rgba(212, 175, 55, 0.12);
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(var(--gold-rgb), 0.12);
+  border: 1px solid rgba(var(--gold-rgb), 0.35);
   color: var(--gold) !important;
   font-size: 12px;
 }
@@ -193,7 +246,7 @@ select option {
   background: linear-gradient(135deg, var(--gold), var(--gold-dark));
   color: var(--bg2) !important;
   font-weight: 700;
-  box-shadow: 0 6px 18px rgba(212, 175, 55, .18);
+  box-shadow: 0 6px 18px rgba(var(--gold-rgb), .18);
 }
 
 .nav-register:hover,
@@ -204,6 +257,42 @@ select option {
 
 .nav-register.active::after {
   display: none;
+}
+
+/* ========== BOTÓN MODO CAMPESTRE ========== */
+.nav-campestre-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1.5px solid rgba(124, 179, 66, .55);
+  background: linear-gradient(135deg, rgba(124, 179, 66, .14), rgba(85, 139, 47, .08));
+  color: #9ccc65;
+  transition: all .25s;
+  white-space: nowrap;
+}
+
+.nav-campestre-btn:hover {
+  background: linear-gradient(135deg, #8bc34a, #558b2f);
+  color: #08150a;
+  box-shadow: 0 6px 18px rgba(124, 179, 66, .35);
+  transform: translateY(-1px);
+}
+
+.nav-campestre-btn.active {
+  background: linear-gradient(135deg, #8bc34a, #558b2f);
+  color: #08150a;
+  box-shadow: 0 6px 18px rgba(124, 179, 66, .4);
+  border-color: transparent;
+}
+
+.nav-campestre-btn span:first-child {
+  font-size: 15px;
 }
 
 /* ========== CONTADORES DE CARACTERES ========== */
@@ -235,8 +324,8 @@ select option {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(212, 175, 55, .07) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 50% at 10% 80%, rgba(212, 175, 55, .05) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(var(--gold-rgb), .07) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 10% 80%, rgba(var(--gold-rgb), .05) 0%, transparent 60%);
 }
 
 .hero-particles {
@@ -346,18 +435,18 @@ select option {
 
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 14px 40px rgba(212, 175, 55, .4);
+  box-shadow: 0 14px 40px rgba(var(--gold-rgb), .4);
 }
 
 .btn-outline {
   background: transparent;
   color: var(--white);
-  border: 2px solid rgba(212, 175, 55, 0.4);
+  border: 2px solid rgba(var(--gold-rgb), 0.4);
 }
 
 .btn-outline:hover {
   border-color: var(--gold);
-  background: rgba(212, 175, 55, .07);
+  background: rgba(var(--gold-rgb), .07);
 }
 
 .btn-full {
@@ -384,7 +473,7 @@ select option {
   object-fit: cover;
   border-radius: 32px;
   border: 1px solid var(--border);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, .45), 0 0 55px rgba(212, 175, 55, .18);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .45), 0 0 55px rgba(var(--gold-rgb), .18);
 }
 
 .hero-image::before {
@@ -392,7 +481,7 @@ select option {
   position: absolute;
   inset: -14px;
   border-radius: 40px;
-  background: linear-gradient(135deg, rgba(212, 175, 55, .22), transparent 65%);
+  background: linear-gradient(135deg, rgba(var(--gold-rgb), .22), transparent 65%);
   z-index: -1;
 }
 
@@ -401,7 +490,7 @@ select option {
   display: flex;
   gap: 0;
   align-items: center;
-  background: rgba(212, 175, 55, .05);
+  background: rgba(var(--gold-rgb), .05);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 20px 32px;
@@ -528,7 +617,7 @@ select option {
   color: var(--gold);
   margin-bottom: 12px;
   padding: 6px 18px;
-  background: rgba(212, 175, 55, .1);
+  background: rgba(var(--gold-rgb), .1);
   border-radius: 50px;
 }
 
@@ -609,14 +698,14 @@ select option {
 .carta-card:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-gold);
-  border-color: rgba(212, 175, 55, .4);
+  border-color: rgba(var(--gold-rgb), .4);
 }
 
 .carta-img {
   height: 160px;
   position: relative;
   overflow: hidden;
-  background: var(--bg2);
+  background: var(--bg-alt);
 }
 
 .carta-photo {
@@ -715,7 +804,7 @@ select option {
 
 .order-header {
   background: var(--bg2);
-  color: var(--white);
+  color: #fff;
   padding: 14px 16px;
   display: flex;
   justify-content: space-between;
@@ -727,7 +816,7 @@ select option {
 .order-header button {
   background: none;
   border: none;
-  color: var(--text-sec);
+  color: rgba(255, 255, 255, .6);
   cursor: pointer;
   font-size: 16px;
 }
@@ -751,7 +840,7 @@ select option {
   padding: 12px 16px;
   font-size: 15px;
   border-top: 2px solid var(--gold);
-  background: rgba(212, 175, 55, .06);
+  background: rgba(var(--gold-rgb), .06);
   color: var(--white);
 }
 
@@ -764,7 +853,7 @@ select option {
 /* ========== GALERÍA ========== */
 .galeria-section {
   padding: 100px 5%;
-  background: var(--bg2);
+  background: var(--bg-alt);
 }
 
 .galeria-grid {
@@ -813,7 +902,7 @@ select option {
 }
 
 .gal-overlay p {
-  color: var(--white);
+  color: #fff;
   font-weight: 600;
   font-size: 16px;
 }
@@ -823,8 +912,8 @@ select option {
 .registro-section {
   padding: 100px 5%;
   background:
-    radial-gradient(ellipse 60% 45% at 15% 20%, rgba(212, 175, 55, .08) 0%, transparent 70%),
-    linear-gradient(135deg, var(--bg) 0%, #080e18 100%);
+    radial-gradient(ellipse 60% 45% at 15% 20%, rgba(var(--gold-rgb), .08) 0%, transparent 70%),
+    linear-gradient(135deg, var(--bg) 0%, var(--bg-end-1) 100%);
 }
 
 .registro-container {
@@ -857,7 +946,7 @@ select option {
   gap: 8px;
   padding: 10px 14px;
   border-radius: 999px;
-  background: rgba(212, 175, 55, .08);
+  background: rgba(var(--gold-rgb), .08);
   border: 1px solid var(--border);
   color: var(--text-sec);
   font-size: 13px;
@@ -889,7 +978,7 @@ select option {
 .reservas-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--bg2) 0%, #080e18 100%);
+  background: linear-gradient(135deg, var(--bg) 0%, var(--bg-end-1) 100%);
   z-index: 0;
 }
 
@@ -897,7 +986,7 @@ select option {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212, 175, 55, .06) 0%, transparent 70%);
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(var(--gold-rgb), .06) 0%, transparent 70%);
 }
 
 .reservas-container {
@@ -983,7 +1072,7 @@ textarea {
 }
 
 .valor:hover {
-  border-color: rgba(212, 175, 55, .4);
+  border-color: rgba(var(--gold-rgb), .4);
 }
 
 .valor-icon {
@@ -1018,7 +1107,7 @@ textarea {
   justify-content: center;
   gap: 16px;
   text-align: center;
-  color: var(--white);
+  color: #fff;
   font-weight: 600;
   font-size: 15px;
   box-shadow: var(--shadow);
@@ -1035,7 +1124,7 @@ textarea {
   border-radius: 14px;
   padding: 20px;
   text-align: center;
-  color: var(--white);
+  color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1053,7 +1142,7 @@ textarea {
 /* ========== COMENTARIOS ========== */
 .comentarios-section {
   padding: 100px 5%;
-  background: var(--bg2);
+  background: var(--bg-alt);
 }
 
 .comentarios-grid {
@@ -1062,6 +1151,11 @@ textarea {
   gap: 24px;
   max-width: 1100px;
   margin: 0 auto 56px;
+  transition: opacity .35s ease;
+}
+
+.comentarios-grid.resenas-fade {
+  opacity: 0;
 }
 
 .comentario-card {
@@ -1079,8 +1173,8 @@ textarea {
 }
 
 .comentario-card.featured {
-  background: linear-gradient(135deg, rgba(212, 175, 55, .12), rgba(212, 175, 55, .04));
-  border-color: rgba(212, 175, 55, .3);
+  background: linear-gradient(135deg, rgba(var(--gold-rgb), .12), rgba(var(--gold-rgb), .04));
+  border-color: rgba(var(--gold-rgb), .3);
 }
 
 .stars {
@@ -1126,6 +1220,22 @@ textarea {
 .comentario-autor small {
   font-size: 12px;
   color: var(--text-sec);
+}
+
+.comentario-respuesta {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-left: 2px solid var(--gold);
+  background: rgba(var(--gold-rgb), .06);
+  border-radius: 0 8px 8px 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-sec);
+}
+
+.comentario-respuesta strong {
+  color: var(--gold);
+  font-size: 12px;
 }
 
 .comentario-form-wrap {
@@ -1185,7 +1295,7 @@ textarea {
 .info-item i {
   font-size: 18px;
   color: var(--gold);
-  background: rgba(212, 175, 55, .1);
+  background: rgba(var(--gold-rgb), .1);
   padding: 12px;
   border-radius: 50%;
   flex-shrink: 0;
@@ -1284,7 +1394,7 @@ textarea {
 .footer-brand .logo-text {
   font-family: 'Playfair Display', serif;
   font-size: 24px;
-  color: var(--white);
+  color: #fff;
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -1294,13 +1404,13 @@ textarea {
 
 .footer-brand p {
   font-size: 13px;
-  color: var(--text-sec);
+  color: rgba(255, 255, 255, .55);
   line-height: 1.7;
   margin-top: 8px;
 }
 
 .footer-links h4 {
-  color: var(--white);
+  color: #fff;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 16px;
@@ -1308,7 +1418,7 @@ textarea {
 
 .footer-links a {
   display: block;
-  color: var(--text-sec);
+  color: rgba(255, 255, 255, .55);
   font-size: 13px;
   margin-bottom: 10px;
   transition: .2s;
@@ -1491,7 +1601,7 @@ textarea {
   font-weight: 600;
   padding: 5px 10px;
   border-radius: 50px;
-  border: 1.5px solid rgba(212, 175, 55, .4);
+  border: 1.5px solid rgba(var(--gold-rgb), .4);
   color: var(--gold);
   background: transparent;
   cursor: pointer;
@@ -1645,7 +1755,7 @@ textarea {
     left: 0;
     right: 0;
     z-index: 999;
-    background: var(--bg2);
+    background: var(--card);
     padding: 10px 5% 22px;
     align-items: stretch;
     gap: 0;
@@ -1680,7 +1790,7 @@ textarea {
 
   .nav-link:hover,
   .nav-link.active {
-    background: rgba(212, 175, 55, 0.08);
+    background: rgba(var(--gold-rgb), 0.08);
     padding-left: 16px;
   }
 
@@ -1693,6 +1803,18 @@ textarea {
     text-align: center;
     border-radius: 10px;
     padding: 16px 10px;
+  }
+
+  .nav-item-campestre {
+    margin-top: 10px;
+  }
+
+  .nav-campestre-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 10px;
+    border-radius: 10px;
+    font-size: 14px;
   }
 
   .hamburger {
