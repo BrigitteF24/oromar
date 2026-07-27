@@ -206,307 +206,7 @@ select option {
   display: none;
 }
 
-/* ========== MODO CAMPESTRE Y CONTADORES ========== */
-.btn-ambiente {
-  border: 1px solid var(--gold);
-  background: transparent;
-  color: var(--gold);
-  cursor: pointer;
-  padding: 8px 14px;
-  border-radius: 25px;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-ambiente:hover {
-  background: var(--gold);
-  color: #111;
-  transform: translateY(-2px);
-}
-
-body.modo-campestre {
-  --bg: #f6ead4;
-  --bg2: #fff8ea;
-  --card: #fffaf0;
-  --card-hover: #fff1d1;
-  --text: #2b1b0d;
-  --text-sec: #6b563d;
-  --gold: #b87918;
-  --gold2: #e0a331;
-  --red: #b83226;
-  --green: #2f7d32;
-
-  background: linear-gradient(180deg, #fff8ea 0%, #f6ead4 100%);
-  color: var(--text);
-}
-
-body.modo-campestre .navbar {
-  background: rgba(255, 248, 234, 0.96);
-  box-shadow: 0 4px 25px rgba(90, 55, 20, 0.18);
-  border-bottom: 1px solid rgba(184, 121, 24, 0.25);
-}
-
-body.modo-campestre .navbar.scrolled {
-  background: rgba(255, 248, 234, 0.98);
-  box-shadow: 0 5px 30px rgba(90, 55, 20, 0.25);
-}
-
-body.modo-campestre .logo-text,
-body.modo-campestre .nav-link,
-body.modo-campestre .mobile-menu-btn {
-  color: #2b1b0d;
-}
-
-body.modo-campestre .nav-link:hover,
-body.modo-campestre .nav-link.active {
-  color: var(--gold);
-}
-
-body.modo-campestre .nav-register {
-  background: var(--gold);
-  color: #fff;
-}
-
-body.modo-campestre .btn-ambiente {
-  border-color: var(--gold);
-  color: var(--gold);
-  background: #fffaf0;
-}
-
-body.modo-campestre .btn-ambiente:hover {
-  background: var(--gold);
-  color: #fff;
-}
-
-body.modo-campestre .hero {
-  background-color: #f6ead4;
-}
-
-body.modo-campestre .hero-overlay {
-  background: rgba(66, 38, 12, 0.35);
-}
-
-body.modo-campestre .hero-content h1,
-body.modo-campestre .hero-content p {
-  color: #fff;
-}
-
-body.modo-campestre section {
-  background: transparent;
-}
-
-body.modo-campestre .section-title,
-body.modo-campestre .section-subtitle,
-body.modo-campestre h1,
-body.modo-campestre h2,
-body.modo-campestre h3,
-body.modo-campestre h4 {
-  color: var(--text);
-}
-
-body.modo-campestre p,
-body.modo-campestre span,
-body.modo-campestre li {
-  color: var(--text-sec);
-}
-
-body.modo-campestre .card,
-body.modo-campestre .menu-card,
-body.modo-campestre .galeria-card,
-body.modo-campestre .promo-card,
-body.modo-campestre .beneficio-card,
-body.modo-campestre .comentario-card,
-body.modo-campestre .info-card,
-body.modo-campestre .reserva-form-card,
-body.modo-campestre .comentario-form-wrap,
-body.modo-campestre .contacto-form-area,
-body.modo-campestre .registro-form-card,
-body.modo-campestre .admin-card {
-  background: var(--card);
-  color: var(--text);
-  border: 1px solid rgba(184, 121, 24, 0.18);
-  box-shadow: 0 8px 25px rgba(90, 55, 20, 0.12);
-}
-
-body.modo-campestre .card:hover,
-body.modo-campestre .menu-card:hover,
-body.modo-campestre .galeria-card:hover,
-body.modo-campestre .promo-card:hover,
-body.modo-campestre .beneficio-card:hover,
-body.modo-campestre .comentario-card:hover,
-body.modo-campestre .info-card:hover {
-  background: var(--card-hover);
-  box-shadow: 0 12px 35px rgba(90, 55, 20, 0.18);
-}
-
-body.modo-campestre .menu-card h3,
-body.modo-campestre .promo-card h3,
-body.modo-campestre .beneficio-card h3,
-body.modo-campestre .comentario-card h3,
-body.modo-campestre .info-card h3 {
-  color: var(--text);
-}
-
-body.modo-campestre .precio,
-body.modo-campestre .price,
-body.modo-campestre .menu-price {
-  color: var(--gold);
-  font-weight: 700;
-}
-
-body.modo-campestre .btn,
-body.modo-campestre .btn-primary,
-body.modo-campestre button[type="submit"] {
-  background: linear-gradient(135deg, var(--gold), var(--gold2));
-  color: #fff;
-  border: none;
-  box-shadow: 0 6px 18px rgba(184, 121, 24, 0.25);
-}
-
-body.modo-campestre .btn:hover,
-body.modo-campestre .btn-primary:hover,
-body.modo-campestre button[type="submit"]:hover {
-  background: linear-gradient(135deg, #9f6410, #d99422);
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-body.modo-campestre .btn-outline,
-body.modo-campestre .btn-secondary {
-  background: transparent;
-  color: var(--gold);
-  border: 1px solid var(--gold);
-}
-
-body.modo-campestre .btn-outline:hover,
-body.modo-campestre .btn-secondary:hover {
-  background: var(--gold);
-  color: #fff;
-}
-
-body.modo-campestre input,
-body.modo-campestre textarea,
-body.modo-campestre select {
-  background: #fff;
-  color: var(--text);
-  border: 1px solid rgba(107, 86, 61, 0.35);
-  box-shadow: none;
-}
-
-body.modo-campestre input::placeholder,
-body.modo-campestre textarea::placeholder {
-  color: #8a755c;
-}
-
-body.modo-campestre input:focus,
-body.modo-campestre textarea:focus,
-body.modo-campestre select:focus {
-  outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(184, 121, 24, 0.18);
-}
-
-body.modo-campestre label {
-  color: var(--text);
-}
-
-body.modo-campestre .contador-caracteres {
-  color: var(--text-sec);
-}
-
-body.modo-campestre .contador-caracteres.limite {
-  color: var(--red);
-}
-
-body.modo-campestre .registro-section,
-body.modo-campestre .reserva-section,
-body.modo-campestre .comentarios-section,
-body.modo-campestre .contacto-section {
-  background: linear-gradient(180deg, #fff8ea 0%, #f6ead4 100%);
-}
-
-body.modo-campestre .registro-intro,
-body.modo-campestre .reserva-info,
-body.modo-campestre .contacto-info {
-  background: #fffaf0;
-  border: 1px solid rgba(184, 121, 24, 0.18);
-  box-shadow: 0 8px 25px rgba(90, 55, 20, 0.12);
-}
-
-body.modo-campestre .badge,
-body.modo-campestre .tag,
-body.modo-campestre .estado,
-body.modo-campestre .categoria {
-  background: rgba(184, 121, 24, 0.14);
-  color: var(--gold);
-}
-
-body.modo-campestre .footer {
-  background: #2b1b0d;
-  color: #fff8ea;
-}
-
-body.modo-campestre .footer p,
-body.modo-campestre .footer span,
-body.modo-campestre .footer li,
-body.modo-campestre .footer a {
-  color: #f6ead4;
-}
-
-body.modo-campestre .footer a:hover {
-  color: var(--gold2);
-}
-
-body.modo-campestre .toast {
-  background: #fffaf0;
-  color: var(--text);
-  border: 1px solid rgba(184, 121, 24, 0.25);
-  box-shadow: 0 8px 25px rgba(90, 55, 20, 0.18);
-}
-
-body.modo-campestre .toast.success {
-  border-left: 5px solid var(--green);
-}
-
-body.modo-campestre .toast.error {
-  border-left: 5px solid var(--red);
-}
-
-body.modo-campestre table {
-  background: #fffaf0;
-  color: var(--text);
-}
-
-body.modo-campestre th {
-  background: #ead3a8;
-  color: #2b1b0d;
-}
-
-body.modo-campestre td {
-  border-color: rgba(107, 86, 61, 0.2);
-}
-
-body.modo-campestre .admin-panel,
-body.modo-campestre .admin-section {
-  background: #f6ead4;
-}
-
-body.modo-campestre .admin-sidebar {
-  background: #fffaf0;
-  border-right: 1px solid rgba(184, 121, 24, 0.2);
-}
-
-body.modo-campestre .admin-sidebar a {
-  color: var(--text);
-}
-
-body.modo-campestre .admin-sidebar a:hover,
-body.modo-campestre .admin-sidebar a.active {
-  background: rgba(184, 121, 24, 0.14);
-  color: var(--gold);
-}
-
+/* ========== CONTADORES DE CARACTERES ========== */
 .contador-caracteres {
   display: block;
   margin-top: 6px;
@@ -1931,27 +1631,76 @@ textarea {
   }
 }
 
-@media(max-width:768px) {
+/* ===== Menú desplegable (tablet + móvil), estilo tarjeta ===== */
+@media(max-width:1024px) {
+  .navbar {
+    position: fixed;
+  }
+
   .nav-links {
     display: none;
     flex-direction: column;
-    position: fixed;
-    inset: 0;
-    top: 70px;
-    background: rgba(5, 10, 16, .98);
-    padding: 40px 5%;
-    align-items: flex-start;
-    gap: 4px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: var(--bg2);
+    padding: 10px 5% 22px;
+    align-items: stretch;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
   }
 
   .nav-links.open {
     display: flex;
   }
 
+  .nav-links li {
+    width: 100%;
+  }
+
+  .nav-link {
+    display: block;
+    width: 100%;
+    padding: 18px 10px;
+    font-size: 16px;
+    line-height: 1.2;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-link.active::after {
+    display: none;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    background: rgba(212, 175, 55, 0.08);
+    padding-left: 16px;
+  }
+
+  .nav-links li:last-child .nav-link {
+    border-bottom: none;
+    margin-top: 16px;
+  }
+
+  .nav-register {
+    text-align: center;
+    border-radius: 10px;
+    padding: 16px 10px;
+  }
+
   .hamburger {
     display: flex;
   }
+}
 
+@media(max-width:768px) {
   .hero-content {
     padding-top: 100px;
   }

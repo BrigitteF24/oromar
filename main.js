@@ -21,29 +21,18 @@ window.addEventListener('scroll', () => {
 });
 
 if (hamburger && navLinks) {
-  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  hamburger.addEventListener('click', () => {
+    const abierto = navLinks.classList.toggle('open');
+    document.body.classList.toggle('nav-open', abierto);
+  });
 }
 
 document.querySelectorAll('.nav-link').forEach(link => {
-  link.addEventListener('click', () => navLinks?.classList.remove('open'));
-});
-
-// ---------- MODO CAMPESTRE ----------
-const btnAmbiente = document.getElementById('btnAmbiente');
-
-if (btnAmbiente) {
-  btnAmbiente.addEventListener('click', () => {
-    document.body.classList.toggle('modo-campestre');
-
-    if (document.body.classList.contains('modo-campestre')) {
-      btnAmbiente.textContent = 'Modo oscuro';
-      showToast('Modo campestre activado', 'success');
-    } else {
-      btnAmbiente.textContent = 'Modo campestre';
-      showToast('Modo oscuro activado', 'success');
-    }
+  link.addEventListener('click', () => {
+    navLinks?.classList.remove('open');
+    document.body.classList.remove('nav-open');
   });
-}
+});
 
 // ---------- PARTICLES ----------
 const particlesContainer = document.getElementById('particles');

@@ -211,6 +211,108 @@
       border-radius: 50px;
     }
 
+    .noti-wrap {
+      position: relative;
+    }
+
+    .noti-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 6px;
+      border-radius: 50%;
+      position: relative;
+      line-height: 1;
+      transition: background .15s;
+    }
+
+    .noti-btn:hover {
+      background: rgba(0, 0, 0, .05);
+    }
+
+    .noti-btn .badge-noti {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      padding: 1px 6px;
+    }
+
+    .noti-btn .badge-noti.oculto {
+      display: none;
+    }
+
+    .noti-panel {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 340px;
+      max-width: 90vw;
+      max-height: 420px;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .18);
+      z-index: 50;
+      animation: modalIn .15s ease-out;
+    }
+
+    .noti-panel.active {
+      display: block;
+    }
+
+    .noti-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    .noti-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .noti-item:last-child {
+      border-bottom: none;
+    }
+
+    .noti-item:hover {
+      background: #f7f8fb;
+    }
+
+    .noti-icon {
+      font-size: 16px;
+      margin-top: 1px;
+    }
+
+    .noti-texto {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .noti-texto b {
+      color: var(--dark);
+    }
+
+    .noti-vacio {
+      padding: 24px 16px;
+      text-align: center;
+      color: #999;
+      font-size: 13px;
+    }
+
     .topbar-user {
       display: flex;
       align-items: center;
@@ -316,6 +418,19 @@
     .card-header h3 {
       font-size: 16px;
       font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-hint {
+      font-size: 13px;
+      color: #6b7280;
+      margin: -10px 0 16px;
+      line-height: 1.5;
     }
 
     .btn-sm {
@@ -439,6 +554,411 @@
     .form-group select:focus {
       border-color: var(--gold);
     }
+
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: .2s;
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .form-group textarea:focus {
+      border-color: var(--gold);
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-hint {
+      font-size: 11px;
+      color: #999;
+      margin-top: -8px;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 26, 46, .55);
+      backdrop-filter: blur(2px);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 18px;
+      width: 100%;
+      max-width: 440px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .35);
+      animation: modalIn .18s ease-out;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 24px 0 24px;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .modal-close {
+      cursor: pointer;
+      font-size: 22px;
+      color: #aaa;
+      line-height: 1;
+      transition: .2s;
+    }
+
+    .modal-close:hover {
+      color: var(--coral);
+    }
+
+    .modal-body {
+      padding: 20px 24px 24px 24px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .modal-actions .btn-sm,
+    .modal-actions .btn-login {
+      flex: 1;
+      padding: 12px;
+    }
+
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 2px solid var(--border);
+    }
+
+    .modal-readonly {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 14px;
+    }
+
+    .confirm-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin: 0 auto 14px auto;
+    }
+
+    .confirm-icon.danger {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .confirm-icon.warn {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .confirm-text {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+
+    /* TOASTS */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .toast {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dark);
+      min-width: 240px;
+      max-width: 340px;
+      border-left: 4px solid var(--green);
+      animation: toastIn .25s ease-out;
+    }
+
+    .toast.error {
+      border-left-color: var(--coral);
+    }
+
+    .toast.exit {
+      animation: toastOut .25s ease-in forwards;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes toastOut {
+      to {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+    }
+
+    .toast-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    /* MESAS */
+    .mesas-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .mesas-leyenda {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    /* TABLAS: scroll horizontal en pantallas pequeñas en vez de romper el diseño */
+    .table-scroll {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* TOPBAR */
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .hamburger-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--dark);
+      cursor: pointer;
+      padding: 6px;
+      line-height: 1;
+    }
+
+    /* OVERLAY para cerrar el sidebar en móvil/tablet */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .45);
+      z-index: 899;
+    }
+
+    .sidebar-overlay.open {
+      display: block;
+    }
+
+    body.no-scroll {
+      overflow: hidden;
+    }
+
+    /* ============================================================
+       RESPONSIVE: TABLET (≤1024px)
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .mesas-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 900;
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+        box-shadow: 0 0 40px rgba(0, 0, 0, .25);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .admin-main {
+        width: 100%;
+      }
+
+      .hamburger-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .content {
+        padding: 20px;
+      }
+    }
+
+    /* ============================================================
+       RESPONSIVE: MÓVIL (≤768px)
+       ============================================================ */
+    @media (max-width: 768px) {
+      .topbar {
+        padding: 14px 16px;
+      }
+
+      .topbar h2 {
+        font-size: 17px;
+      }
+
+      .topbar-user-name {
+        display: none;
+      }
+
+      .content {
+        padding: 14px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        padding: 14px;
+      }
+
+      .stat-card .val {
+        font-size: 22px;
+      }
+
+      .card {
+        padding: 16px;
+        border-radius: 12px;
+      }
+
+      .card-header {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .mesas-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .sidebar {
+        width: 240px;
+      }
+
+      .login-card {
+        width: 100%;
+        max-width: 340px;
+        padding: 32px 24px;
+      }
+
+      .modal-box {
+        max-width: 100%;
+        margin: 0 10px;
+      }
+
+      table {
+        min-width: 600px;
+      }
+    }
+
+    /* ============================================================
+       RESPONSIVE: MÓVIL PEQUEÑO (≤480px)
+       ============================================================ */
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mesas-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .modal-actions {
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 
@@ -448,30 +968,34 @@
   <div class="login-wrap" id="loginWrap">
     <div class="login-card">
       <img src="img/oromar.png" alt="Logo Oro Mar" width="150">
-      <h1>Sistema de gestión interna</h1>
-      <input type="text" id="loginUser" placeholder="Usuario" value="admin">
-      <input type="password" id="loginPass" placeholder="Contraseña" value="admin123">
+      <h6>Sistema de gestión de Restaurante</h6>
+      <input type="text" id="loginUser" placeholder="Usuario">
+      <input type="password" id="loginPass" placeholder="Contraseña">
       <button class="btn-login" onclick="login()">Ingresar al sistema</button>
-      <p class="login-hint">Demo: admin / admin123</p>
+      <p class="login-hint">Acceso exclusivo para personal autorizado</p>
     </div>
   </div>
 
   <!-- ADMIN PANEL -->
   <div class="admin-wrap" id="adminWrap">
+    <!-- OVERLAY (móvil/tablet) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
+
     <!-- SIDEBAR -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <img src="img/oromar.png" alt="Logo Oro Mar" width="150" height="80">
       <nav class="sidebar-nav">
-        <div class="nav-item active" onclick="showModule('dashboard',this)"><i class="fas fa-th-large"></i> Dashboard
+        <div class="nav-item active" data-modulo="dashboard" onclick="showModule('dashboard',this)"><i class="fas fa-th-large"></i> Dashboard
         </div>
-        <div class="nav-item" onclick="showModule('reservas',this)"><i class="fas fa-calendar-check"></i> Reservas</div>
-        <div class="nav-item" onclick="showModule('pedidos',this)"><i class="fas fa-utensils"></i> Pedidos</div>
-        <div class="nav-item" onclick="showModule('pagos',this)"><i class="fas fa-credit-card"></i> Pagos</div>
-        <div class="nav-item" onclick="showModule('inventario',this)"><i class="fas fa-boxes"></i> Inventario</div>
-        <div class="nav-item" onclick="showModule('productos',this)"><i class="fas fa-hamburger"></i> Productos</div>
-        <div class="nav-item" onclick="showModule('mesas',this)"><i class="fas fa-chair"></i> Mesas</div>
-        <div class="nav-item" onclick="showModule('clientes',this)"><i class="fas fa-users"></i> Clientes</div>
-        <div class="nav-item" onclick="showModule('comentarios',this)"><i class="fas fa-star"></i> Reseñas</div>
+        <div class="nav-item" data-modulo="reservas" onclick="showModule('reservas',this)"><i class="fas fa-calendar-check"></i> Reservas</div>
+        <div class="nav-item" data-modulo="pedidos" onclick="showModule('pedidos',this)"><i class="fas fa-utensils"></i> Pedidos</div>
+        <div class="nav-item" data-modulo="pagos" onclick="showModule('pagos',this)"><i class="fas fa-credit-card"></i> Pagos</div>
+        <div class="nav-item" data-modulo="inventario" onclick="showModule('inventario',this)"><i class="fas fa-boxes"></i> Inventario</div>
+        <div class="nav-item" data-modulo="productos" onclick="showModule('productos',this)"><i class="fas fa-hamburger"></i> Productos</div>
+        <div class="nav-item" data-modulo="mesas" onclick="showModule('mesas',this)"><i class="fas fa-chair"></i> Mesas</div>
+        <div class="nav-item" data-modulo="clientes" onclick="showModule('clientes',this)"><i class="fas fa-users"></i> Clientes</div>
+        <div class="nav-item" data-modulo="comentarios" onclick="showModule('comentarios',this)"><i class="fas fa-star"></i> Reseñas</div>
+        <div class="nav-item" data-modulo="usuarios" onclick="showModule('usuarios',this)"><i class="fas fa-user-shield"></i> Usuarios</div>
       </nav>
       <div class="sidebar-footer">
         <a href="index.html" style="color:inherit;text-decoration:none">← Ver sitio web</a><br>
@@ -482,12 +1006,30 @@
     <!-- MAIN -->
     <div class="admin-main">
       <div class="topbar">
-        <h2 id="topbarTitle">Dashboard</h2>
+        <div class="topbar-left">
+          <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Abrir menú">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h2 id="topbarTitle">Dashboard</h2>
+        </div>
         <div class="topbar-right">
-          <span>🔔 <span class="badge-noti">3</span></span>
+          <div class="noti-wrap" id="notiWrap">
+            <button class="noti-btn" id="notiBtn" onclick="toggleNotificaciones(event)" aria-label="Notificaciones">
+              🔔<span class="badge-noti oculto" id="notiBadge">0</span>
+            </button>
+            <div class="noti-panel" id="notiPanel">
+              <div class="noti-panel-header">
+                <span>Notificaciones</span>
+                <span id="notiActualizar" style="font-weight:400;color:#999;font-size:12px;cursor:pointer;" onclick="cargarNotificaciones()">↻ Actualizar</span>
+              </div>
+              <div id="notiLista">
+                <div class="noti-vacio">Cargando...</div>
+              </div>
+            </div>
+          </div>
           <div class="topbar-user">
             <div class="user-avatar">A</div>
-            <span>Administrador</span>
+            <span class="topbar-user-name">Administrador</span>
           </div>
         </div>
       </div>
@@ -518,7 +1060,7 @@
               <h3>📋 Últimos pedidos</h3><button class="btn-sm btn-success" onclick="showModule('pedidos',null)">Ver
                 todos</button>
             </div>
-            <table>
+            <div class="table-scroll"><table>
               <thead>
                 <tr>
                   <th>#</th>
@@ -529,47 +1071,18 @@
                   <th>Hora</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="dashPedidosBody">
                 <tr>
-                  <td>#001</td>
-                  <td>Mesa 3</td>
-                  <td>Ceviche Mixto, Chicha</td>
-                  <td><span class="badge badge-green">Entregado</span></td>
-                  <td>S/. 46</td>
-                  <td>12:35</td>
-                </tr>
-                <tr>
-                  <td>#002</td>
-                  <td>Mesa 7</td>
-                  <td>Parrilla Campestre, Pisco</td>
-                  <td><span class="badge badge-yellow">En cocina</span></td>
-                  <td>S/. 83</td>
-                  <td>13:10</td>
-                </tr>
-                <tr>
-                  <td>#003</td>
-                  <td>Mesa 1</td>
-                  <td>Langostinos x2, Chicha x2</td>
-                  <td><span class="badge badge-blue">Nuevo</span></td>
-                  <td>S/. 120</td>
-                  <td>13:22</td>
-                </tr>
-                <tr>
-                  <td>#004</td>
-                  <td>Mesa 5</td>
-                  <td>Lomo Saltado, Tiradito</td>
-                  <td><span class="badge badge-yellow">En cocina</span></td>
-                  <td>S/. 70</td>
-                  <td>13:35</td>
+                  <td colspan="6">Cargando pedidos…</td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
           <div class="card">
             <div class="card-header">
               <h3>📅 Reservas próximas</h3>
             </div>
-            <table>
+            <div class="table-scroll"><table>
               <thead>
                 <tr>
                   <th>Cliente</th>
@@ -579,30 +1092,12 @@
                   <th>Estado</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="dashReservasBody">
                 <tr>
-                  <td>María Quispe</td>
-                  <td>Hoy</td>
-                  <td>14:00</td>
-                  <td>4</td>
-                  <td><span class="badge badge-green">Confirmada</span></td>
-                </tr>
-                <tr>
-                  <td>Carlos Mendoza</td>
-                  <td>Hoy</td>
-                  <td>19:30</td>
-                  <td>6</td>
-                  <td><span class="badge badge-green">Confirmada</span></td>
-                </tr>
-                <tr>
-                  <td>Lucía Torres</td>
-                  <td>Mañana</td>
-                  <td>13:00</td>
-                  <td>2</td>
-                  <td><span class="badge badge-yellow">Pendiente</span></td>
+                  <td colspan="5">Cargando reservas…</td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
         </div>
 
@@ -613,7 +1108,7 @@
               <h3>📅 Gestión de Reservas</h3><button class="btn-sm btn-primary" onclick="addReserva()">+ Nueva
                 reserva</button>
             </div>
-            <table>
+            <div class="table-scroll"><table>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -629,40 +1124,10 @@
               </thead>
               <tbody id="reservasBody">
                 <tr>
-                  <td>#R001</td>
-                  <td>María Quispe</td>
-                  <td>944 111 222</td>
-                  <td>Hoy</td>
-                  <td>14:00</td>
-                  <td>4</td>
-                  <td>Mesa 3</td>
-                  <td><span class="badge badge-green">Confirmada</span></td>
-                  <td><button class="btn-sm btn-danger" onclick="deleteRow(this)">Cancelar</button></td>
-                </tr>
-                <tr>
-                  <td>#R002</td>
-                  <td>Carlos Mendoza</td>
-                  <td>955 333 444</td>
-                  <td>Hoy</td>
-                  <td>19:30</td>
-                  <td>6</td>
-                  <td>Mesa 7</td>
-                  <td><span class="badge badge-green">Confirmada</span></td>
-                  <td><button class="btn-sm btn-danger" onclick="deleteRow(this)">Cancelar</button></td>
-                </tr>
-                <tr>
-                  <td>#R003</td>
-                  <td>Lucía Torres</td>
-                  <td>966 555 666</td>
-                  <td>Mañana</td>
-                  <td>13:00</td>
-                  <td>2</td>
-                  <td>Mesa 2</td>
-                  <td><span class="badge badge-yellow">Pendiente</span></td>
-                  <td><button class="btn-sm btn-success" onclick="confirmRow(this)">Confirmar</button></td>
+                  <td colspan="9">Cargando reservas…</td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
         </div>
 
@@ -670,9 +1135,10 @@
         <div class="module" id="mod-pedidos">
           <div class="card">
             <div class="card-header">
-              <h3>🍽️ Pedidos en curso</h3>
+              <h3>🍽️ Pedidos en curso</h3><button class="btn-sm btn-primary" onclick="addPedido()">+ Nuevo
+                pedido</button>
             </div>
-            <table>
+            <div class="table-scroll"><table>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -684,36 +1150,12 @@
                   <th>Acción</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="pedidosBody">
                 <tr>
-                  <td>#001</td>
-                  <td>Mesa 3</td>
-                  <td>Juan R.</td>
-                  <td>Ceviche Mixto, Chicha</td>
-                  <td><span class="badge badge-green">Entregado</span></td>
-                  <td>S/.46</td>
-                  <td><button class="btn-sm btn-primary" onclick="cobrarPedido(this,'46')">Cobrar</button></td>
-                </tr>
-                <tr>
-                  <td>#002</td>
-                  <td>Mesa 7</td>
-                  <td>Ana M.</td>
-                  <td>Parrilla, Pisco Sour</td>
-                  <td><span class="badge badge-yellow">En cocina</span></td>
-                  <td>S/.83</td>
-                  <td><button class="btn-sm btn-success" onclick="marcarListo(this)">Listo</button></td>
-                </tr>
-                <tr>
-                  <td>#003</td>
-                  <td>Mesa 1</td>
-                  <td>Juan R.</td>
-                  <td>Langostinos x2, Chicha x2</td>
-                  <td><span class="badge badge-blue">Nuevo</span></td>
-                  <td>S/.120</td>
-                  <td><button class="btn-sm btn-success" onclick="marcarListo(this)">Preparar</button></td>
+                  <td colspan="7">Cargando pedidos…</td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
         </div>
 
@@ -725,19 +1167,19 @@
             </div>
             <div class="stats-grid">
               <div class="stat-card gold"><label>Efectivo hoy</label>
-                <div class="val">S/.680</div>
+                <div class="val">S/.0.00</div>
               </div>
               <div class="stat-card blue"><label>Tarjeta hoy</label>
-                <div class="val">S/.420</div>
+                <div class="val">S/.0.00</div>
               </div>
               <div class="stat-card green"><label>Yape/Plin</label>
-                <div class="val">S/.140</div>
+                <div class="val">S/.0.00</div>
               </div>
               <div class="stat-card coral"><label>Total día</label>
-                <div class="val">S/.1,240</div>
+                <div class="val">S/.0.00</div>
               </div>
             </div>
-            <table>
+            <div class="table-scroll"><table>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -750,31 +1192,10 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>#P001</td>
-                  <td>#001</td>
-                  <td>S/.46</td>
-                  <td>Efectivo</td>
-                  <td>B001-00001</td>
-                  <td>12:45 hoy</td>
-                </tr>
-                <tr>
-                  <td>#P002</td>
-                  <td>#002</td>
-                  <td>S/.83</td>
-                  <td>Tarjeta</td>
-                  <td>B001-00002</td>
-                  <td>13:20 hoy</td>
-                </tr>
-                <tr>
-                  <td>#P003</td>
-                  <td>#004</td>
-                  <td>S/.70</td>
-                  <td>Yape</td>
-                  <td>B001-00003</td>
-                  <td>13:50 hoy</td>
+                  <td colspan="6">Cargando pagos…</td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
         </div>
 
@@ -782,10 +1203,16 @@
         <div class="module" id="mod-inventario">
           <div class="card">
             <div class="card-header">
-              <h3>📦 Control de Inventario</h3><button class="btn-sm btn-primary" onclick="addInsumo()">+
-                Ingreso</button>
+              <h3>📦 Insumos y stock</h3>
+              <div class="header-actions">
+                <button class="btn-sm btn-secondary" onclick="addInsumo()">🔄 Registrar movimiento</button>
+                <button class="btn-sm btn-primary" id="btnNuevoInsumo" onclick="addInsumoNuevo()">+ Nuevo
+                  insumo</button>
+              </div>
             </div>
-            <table>
+            <p class="card-hint">Da de alta aquí cada insumo que uses en cocina (nombre, unidad y stock mínimo).
+              Luego usa «Registrar movimiento» para las entradas, salidas o ajustes de stock del día a día.</p>
+            <div class="table-scroll"><table>
               <thead>
                 <tr>
                   <th>Insumo</th>
@@ -793,60 +1220,15 @@
                   <th>Stock actual</th>
                   <th>Stock mínimo</th>
                   <th>Estado</th>
-                  <th>Último movimiento</th>
+                  <th class="col-admin-insumo">Acciones</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="insumosBody">
                 <tr>
-                  <td>Corvina fresca</td>
-                  <td>kg</td>
-                  <td>12.5</td>
-                  <td>5</td>
-                  <td><span class="badge badge-green">OK</span></td>
-                  <td>Hoy 08:00</td>
-                </tr>
-                <tr>
-                  <td>Langostinos</td>
-                  <td>kg</td>
-                  <td>4.0</td>
-                  <td>3</td>
-                  <td><span class="badge badge-yellow">Bajo</span></td>
-                  <td>Hoy 08:00</td>
-                </tr>
-                <tr>
-                  <td>Limón amarillo</td>
-                  <td>kg</td>
-                  <td>18.0</td>
-                  <td>10</td>
-                  <td><span class="badge badge-green">OK</span></td>
-                  <td>Ayer</td>
-                </tr>
-                <tr>
-                  <td>Ají amarillo</td>
-                  <td>kg</td>
-                  <td>2.0</td>
-                  <td>2</td>
-                  <td><span class="badge badge-red">⚠ Urgente</span></td>
-                  <td>Ayer</td>
-                </tr>
-                <tr>
-                  <td>Arroz blanco</td>
-                  <td>kg</td>
-                  <td>35.0</td>
-                  <td>15</td>
-                  <td><span class="badge badge-green">OK</span></td>
-                  <td>Lunes</td>
-                </tr>
-                <tr>
-                  <td>Papa amarilla</td>
-                  <td>kg</td>
-                  <td>22.0</td>
-                  <td>10</td>
-                  <td><span class="badge badge-green">OK</span></td>
-                  <td>Lunes</td>
+                  <td colspan="6">Cargando insumos…</td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
         </div>
 
@@ -854,10 +1236,32 @@
         <div class="module" id="mod-productos">
           <div class="card">
             <div class="card-header">
+              <h3>🏷️ Categorías de la carta</h3><button class="btn-sm btn-primary" onclick="addCategoria()">+
+                Nueva categoría</button>
+            </div>
+            <p class="card-hint">Crea aquí las categorías (Mariscos, Carnes, Bebidas, Postres...) para poder
+              asignarlas a cada producto sin depender de la base de datos.</p>
+            <div class="table-scroll"><table>
+              <thead>
+                <tr>
+                  <th>Categoría</th>
+                  <th>Productos activos</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="categoriasBody">
+                <tr>
+                  <td colspan="3">Cargando categorías…</td>
+                </tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
               <h3>🍽️ Gestión de Carta</h3><button class="btn-sm btn-primary" onclick="addProducto()">+
                 Producto</button>
             </div>
-            <table>
+            <div class="table-scroll"><table>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -868,45 +1272,12 @@
                   <th>Acciones</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="productosBody">
                 <tr>
-                  <td>#1</td>
-                  <td>Ceviche Mixto</td>
-                  <td>Mariscos</td>
-                  <td>S/.38</td>
-                  <td>Corvina, pulpo, camarones...</td>
-                  <td><button class="btn-sm btn-primary">Editar</button> <button class="btn-sm btn-danger"
-                      onclick="deleteRow(this)">Eliminar</button></td>
-                </tr>
-                <tr>
-                  <td>#2</td>
-                  <td>Langostinos al Ajillo</td>
-                  <td>Mariscos</td>
-                  <td>S/.52</td>
-                  <td>Langostinos, mantequilla...</td>
-                  <td><button class="btn-sm btn-primary">Editar</button> <button class="btn-sm btn-danger"
-                      onclick="deleteRow(this)">Eliminar</button></td>
-                </tr>
-                <tr>
-                  <td>#3</td>
-                  <td>Lomo Saltado</td>
-                  <td>Carnes</td>
-                  <td>S/.42</td>
-                  <td>Lomo fino, tomate...</td>
-                  <td><button class="btn-sm btn-primary">Editar</button> <button class="btn-sm btn-danger"
-                      onclick="deleteRow(this)">Eliminar</button></td>
-                </tr>
-                <tr>
-                  <td>#4</td>
-                  <td>Parrilla Campestre</td>
-                  <td>Carnes</td>
-                  <td>S/.65</td>
-                  <td>Costillas, chorizo...</td>
-                  <td><button class="btn-sm btn-primary">Editar</button> <button class="btn-sm btn-danger"
-                      onclick="deleteRow(this)">Eliminar</button></td>
+                  <td colspan="6">Cargando productos…</td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
         </div>
 
@@ -916,9 +1287,9 @@
             <div class="card-header">
               <h3>🪑 Estado de Mesas</h3>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:20px;" id="mesasGrid">
+            <div class="mesas-grid" id="mesasGrid">
             </div>
-            <div style="display:flex;gap:16px;font-size:13px;">
+            <div class="mesas-leyenda">
               <span>🟢 Disponible</span><span>🔴 Ocupada</span><span>🟡 Reservada</span>
             </div>
           </div>
@@ -930,47 +1301,22 @@
             <div class="card-header">
               <h3>👥 Clientes registrados</h3>
             </div>
-            <table>
+            <div class="table-scroll"><table>
               <thead>
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
                   <th>Teléfono</th>
                   <th>Visitas</th>
-                  <th>Gasto total</th>
+                  <th>Correo</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>#C001</td>
-                  <td>María Quispe</td>
-                  <td>944 111 222</td>
-                  <td>12</td>
-                  <td>S/.580</td>
-                </tr>
-                <tr>
-                  <td>#C002</td>
-                  <td>Carlos Mendoza</td>
-                  <td>955 333 444</td>
-                  <td>5</td>
-                  <td>S/.290</td>
-                </tr>
-                <tr>
-                  <td>#C003</td>
-                  <td>Lucía Torres</td>
-                  <td>966 555 666</td>
-                  <td>3</td>
-                  <td>S/.145</td>
-                </tr>
-                <tr>
-                  <td>#C004</td>
-                  <td>Roberto Silva</td>
-                  <td>977 777 888</td>
-                  <td>8</td>
-                  <td>S/.410</td>
+                  <td colspan="5">Cargando clientes…</td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
         </div>
 
@@ -980,7 +1326,7 @@
             <div class="card-header">
               <h3>⭐ Reseñas de clientes</h3>
             </div>
-            <table>
+            <div class="table-scroll"><table>
               <thead>
                 <tr>
                   <th>Cliente</th>
@@ -993,23 +1339,34 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Ana López</td>
-                  <td>⭐⭐⭐⭐⭐</td>
-                  <td>Excelente servicio y comida increíble</td>
-                  <td>Hoy</td>
-                  <td><span class="badge badge-yellow">Pendiente</span></td>
-                  <td><button class="btn-sm btn-success" onclick="aprobarReseña(this)">Aprobar</button></td>
-                </tr>
-                <tr>
-                  <td>Pedro García</td>
-                  <td>⭐⭐⭐⭐</td>
-                  <td>Muy buena comida, esperé un poco</td>
-                  <td>Ayer</td>
-                  <td><span class="badge badge-green">Publicado</span></td>
-                  <td><button class="btn-sm btn-danger" onclick="deleteRow(this)">Ocultar</button></td>
+                  <td colspan="6">Cargando reseñas…</td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
+          </div>
+        </div>
+
+        <!-- USUARIOS (solo Administrador) -->
+        <div class="module" id="mod-usuarios">
+          <div class="card">
+            <div class="card-header">
+              <h3>🔐 Usuarios del sistema</h3><button class="btn-sm btn-primary" onclick="addUsuario()">+ Nuevo
+                usuario</button>
+            </div>
+            <div class="table-scroll"><table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Usuario</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="usuariosBody">
+              </tbody>
+            </table></div>
           </div>
         </div>
 
@@ -1017,68 +1374,23 @@
     </div><!-- /admin-main -->
   </div><!-- /admin-wrap -->
 
-  <script>
-    // LOGIN
-    function login() {
-      const u = document.getElementById('loginUser').value;
-      const p = document.getElementById('loginPass').value;
-      if (u === 'admin' && p === 'admin123') {
-        document.getElementById('loginWrap').style.display = 'none';
-        document.getElementById('adminWrap').style.display = 'flex';
-      } else {
-        alert('Credenciales incorrectas. Usa admin / admin123');
-      }
-    }
-    function logout() {
-      document.getElementById('loginWrap').style.display = 'flex';
-      document.getElementById('adminWrap').style.display = 'none';
-    }
-    document.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+  <!-- MODAL GENÉRICO -->
+  <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this) cerrarModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">Título</h3>
+        <span class="modal-close" onclick="cerrarModal()">&times;</span>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
 
-    // MODULE NAV
-    function showModule(id, el) {
-      document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
-      document.getElementById('mod-' + id).classList.add('active');
-      if (el) {
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        el.classList.add('active');
-        document.getElementById('topbarTitle').textContent = el.textContent.trim();
-      }
-      if (id === 'mesas') renderMesas();
-    }
+  <!-- TOASTS -->
+  <div class="toast-container" id="toastContainer"></div>
 
-    // MESAS VISUAL
-    const mesasState = ['disponible', 'disponible', 'ocupada', 'reservada', 'disponible', 'ocupada', 'ocupada', 'disponible', 'reservada', 'disponible'];
-    function renderMesas() {
-      const g = document.getElementById('mesasGrid');
-      g.innerHTML = mesasState.map((s, i) => {
-        const color = s === 'disponible' ? '#d1fae5' : s === 'ocupada' ? '#fee2e2' : '#fef3c7';
-        const border = s === 'disponible' ? '#10b981' : s === 'ocupada' ? '#ef4444' : '#f59e0b';
-        const emoji = s === 'disponible' ? '🟢' : s === 'ocupada' ? '🔴' : '🟡';
-        return `<div onclick="toggleMesa(${i})" style="background:${color};border:2px solid ${border};border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:.2s;">
-      <div style="font-size:24px">🪑</div>
-      <div style="font-weight:700;margin:4px 0">Mesa ${i + 1}</div>
-      <div style="font-size:11px;color:#666">${emoji} ${s.charAt(0).toUpperCase() + s.slice(1)}</div>
-    </div>`;
-      }).join('');
-    }
-    function toggleMesa(i) {
-      const states = ['disponible', 'ocupada', 'reservada'];
-      const idx = states.indexOf(mesasState[i]);
-      mesasState[i] = states[(idx + 1) % 3];
-      renderMesas();
-    }
-
-    // UTILS
-    function deleteRow(btn) { btn.closest('tr').remove(); }
-    function confirmRow(btn) { btn.closest('tr').querySelector('.badge').textContent = 'Confirmada'; btn.closest('tr').querySelector('.badge').className = 'badge badge-green'; btn.remove(); }
-    function marcarListo(btn) { const row = btn.closest('tr'); row.querySelector('.badge').textContent = 'Entregado'; row.querySelector('.badge').className = 'badge badge-green'; btn.textContent = 'Cobrar'; btn.onclick = () => cobrarPedido(btn, ''); }
-    function cobrarPedido(btn, monto) { alert('Registrar pago por S/. ' + monto + '\n\nEn producción esto abriría el módulo de pago.'); }
-    function aprobarReseña(btn) { const row = btn.closest('tr'); row.querySelector('.badge').textContent = 'Publicado'; row.querySelector('.badge').className = 'badge badge-green'; btn.remove(); }
-    function addReserva() { alert('Formulario de nueva reserva.\nEn producción mostraría un modal con el formulario completo.'); }
-    function addProducto() { alert('Formulario de nuevo producto.\nEn producción mostraría un modal con campos de nombre, categoría, precio, descripción.'); }
-    function addInsumo() { alert('Registro de entrada de insumo.\nEn producción mostraría el formulario de inventario.'); }
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script src="admin.js"></script>
 </body>
 
 </html>
